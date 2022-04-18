@@ -1,13 +1,13 @@
 ---
 # multilingual page pair id, this must pair with translations of this page. (This name must be unique)
 lng_pair: id_Examples
-title: Examples
+title: 자바자바자바자바자바자바
 
 # post specific
 # if not specified, .name will be used from _data/owner.yml
 author: Mr. Green's Workshop
 # multiple category is not supported
-category: jekyll
+category: 자바
 # multiple tag entries are possible
 tags: [jekyll, sample, example post]
 # thumbnail image for post
