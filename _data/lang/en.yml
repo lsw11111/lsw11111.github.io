@@ -64,8 +64,8 @@ post:
   pager_buttons:
     older_post: "← Older Post"
     newer_post: "Newer Post →"
-    first_post: First
-    last_post: Last
+    first_post: 처음
+    last_post: 마지막
   comments:
     disqus:
       count_title: Comments

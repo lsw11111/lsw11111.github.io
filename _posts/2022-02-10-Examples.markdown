@@ -7,7 +7,7 @@ title: Examples
 # if not specified, .name will be used from _data/owner.yml
 author: Mr. Green's Workshop
 # multiple category is not supported
-category: jekyll
+category: 스프링
 # multiple tag entries are possible
 tags: [jekyll, sample, example post]
 # thumbnail image for post

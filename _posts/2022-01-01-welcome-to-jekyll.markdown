@@ -7,7 +7,7 @@ title: "이승준 스터디정리 블로그입니다"
 # if not specified, .name will be used from _data/owner.yml
 author: Jekyll
 # multiple category is not supported
-category: jekyll
+category: 스프링
 # multiple tag entries are possible
 tags: [jekyll, example post, sample, test]
 # thumbnail image for post
