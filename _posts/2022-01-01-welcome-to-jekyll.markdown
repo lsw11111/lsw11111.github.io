@@ -1,7 +1,7 @@
 ---
 # multilingual page pair id, this must pair with translations of this page. (This name must be unique)
 lng_pair: id_What_is_this
-title: "Welcome to Jekyll!"
+title: "이승준 스터디정리 블로그입니다"
 
 # post specific
 # if not specified, .name will be used from _data/owner.yml
@@ -16,7 +16,7 @@ img: ":post_pic3.jpg"
 #comments_disable: true
 
 # publish date
-date: 2022-01-01 10:04:30 +0900
+date: 2022-04-18 05:04:30 +0900
 
 # seo
 # if not specified, date will be used.
