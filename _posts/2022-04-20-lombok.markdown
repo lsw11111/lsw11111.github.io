@@ -1,0 +1,91 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[스프링]lombok"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 스프링
+# multiple tag entries are possible
+tags: [library]
+# thumbnail image for post
+img: ":lombok.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-20 08:11:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# lombok
+lombok은 자바의 라이브러리로 반복되는 메서드를 애너테이션을 사용해   
+자동으로 작성해주는 라이브러리이다   
+프로퍼티에 대해서 Getter나 Setter, 생성자 등을   
+매번 작성해줘야 하는 경우가 많은데 이러한 부분을 자동으로 만들어주는   
+라이브러리라고 할 수 있다   
+
+# 의존성 주입 (Dependancy Injection)
+implementation 'org.projectlombok:lombok:1.18.22'
+
+# 사용법
+@Getter, @Setter   
+해당 클래스가 가진 필드에 대해 getter와 setter를 자동으로 생성해준다      
+
+@NonNull   
+메서드나 생성자의 매개변수 앞에 @NonNull을 사용하면 null 여부를 체크해준다   
+
+@ToString   
+해당 클래스에 toString() 메서드를 생성한다   
+기본적으로 클래스이름과 각 필드에 대한 값을 구분해서 출력해준다   
+
+@EqualsAndHashCode   
+equals(Object other)와 hashCode()를 만들어준다   
+
+@NoArgsConstructor   
+매개변수가 없는 생성자를 생성한다   
+
+@RequiredArgsConstructor   
+초기화되지 않은 모든 final필드, @NotNull필드에 대한 생성자를 생성한다   
+
+@AllArgsConstructor   
+모든 필드에 대한 생성자를 만들어준다   
+
+@Data   
+모든 필드에 대해 @ToString, @EqualsAndHashCode, @Getter를   
+모든 non-final 필드에 대해 @Setter를 설정하고   
+@RequiredArgsConstructor를 설정해주는 단축 애너테이션이다   
+
+@With   
+setter의 불변 버전으로 필드에 @With를 명시한 경우   
+withFieldName(newValue) 형태로 메소드를 추가해준다   
+
+@Builder   
+빌더를 자동으로 작성해준다   
+기본적으로 모든 필드에 적용되며 원하는 필드에만 적용하려고 하는 경우엔   
+생성자를 작성하고 그위에 애너테이션을 붙인다   
+
+@CleanUp   
+안전하게 close()를 호출해준다   

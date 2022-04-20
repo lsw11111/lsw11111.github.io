@@ -1,7 +1,7 @@
 ---
 # multilingual page pair id, this must pair with translations of this page. (This name must be unique)
 lng_pair: id_Examples
-title: "[스프링]프로젝트 초기작업"
+title: "[스프링]프로젝트 초기작업(MyBatis)"
 
 # post specific
 # if not specified, .name will be used from _data/owner.yml
@@ -9,7 +9,7 @@ author: Mr. Green's Workshop
 # multiple category is not supported
 category: 스프링
 # multiple tag entries are possible
-tags: [jekyll, sample, example post]
+tags: [framework]
 # thumbnail image for post
 img: ":post_pic1.jpg"
 # disable comments on this page
@@ -43,24 +43,24 @@ date: 2022-04-18 08:01:06 +0900
 
 # 프로젝트 생성
 [스프링 스타트](https://start.spring.io/)   
-여기서 프로젝트의 양식을 선택하고 다운받아서 IntelliJ에서 불러옵니다   
+여기서 프로젝트의 양식을 선택하고 다운받아서 IntelliJ에서 온다   
 스프링부트 버전중 SNAPSHOT은 현재 만들고있는 버전이고   
-M1, M2 등은 정식 릴리즈된 버전이 아니므로 숫자 뒤에 아무것도 없는것을 선택하는게 좋습니다   
-dependency는 Spring Web과 사용자가 사용할것을 선택합니다      
-DB연결 방식은 JPA방식과 MyBatis방식이 있는데 여기서는 MyBatis방식으로 진행합니다<br/><br/>
+M1, M2 등은 정식 릴리즈된 버전이 아니므로 숫자 뒤에 아무것도 없는것을 선택하는게 좋다   
+dependency는 Spring Web과 사용자가 사용할것을 선택한다      
+DB연결 방식은 JPA방식과 MyBatis방식이 있는데 여기서는 MyBatis방식으로 진행한다<br/><br/>
 
 # 의존성 주입 (Dependancy Injection)
 maven을 선택했을시 pom.xml에서 추가하며   
-gradle을 선택했을시 build.gradle에서 추가합니다   
-gradle로 진행할것이므로 build.gradle에 의존성을 주입해줍니다   
-DB는 MySQL을 쓸것이므로 MySQL 의존성을 추가합니다   
+gradle을 선택했을시 build.gradle에서 추가한다   
+gradle로 진행할것이므로 build.gradle에 작성한다   
+DB는 MySQL을 쓸것이므로 MySQL 의존성을 추가   
 implementation 'mysql:mysql-connector-java'   
-DB연결 방식은 MyBatis방식으로 할것이므로 이것도 추가합니다   
+DB연결 방식은 MyBatis방식으로 할것이므로 이것도 추가한다   
 implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 
 # MyBatis 초기설정
 configuration패키지를 만들고 DatabaseConfiguration클래스를 만들고   
-스프링빈으로 등록합니다   
+스프링빈으로 등록      
 ```
 @Configuration
 public class DataBaseConfiguration {
@@ -72,7 +72,7 @@ public class DataBaseConfiguration {
     }
 }   
 ```
-그리고 application.properties에 접속정보를 입력합니다  
+그리고 application.properties에 접속정보를 입력     
 ```
 spring.datasource.driverClassName = com.mysql.cj.jdbc.Driver   
 spring.datasource.JdbcUrl = jdbc:mysql://localhost:3306/songjavadb?serverTimezone=UTC&characterEncoding=UTF-8   
@@ -82,7 +82,7 @@ spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=none   
 spring.jpa.properties.hibernate.format_sql=true    
 ```
-위와 같이 필요한 정보들을 입력합니다  
-설정 완료후 서버를 실행하고 localhost:8080에 들어가면 Whitelabel Error Page가 뜹니다   
-서버가 정상적으로 켜지는것이 확인되면 초기설정은 끝입니다   
+위와 같이 필요한 정보들을 입력한다   
+설정 완료후 서버를 실행하고 localhost:8080에 들어가면 Whitelabel Error Page가 뜨게 된다   
+서버가 정상적으로 켜지는것이 확인되면 초기설정은 끝   
 

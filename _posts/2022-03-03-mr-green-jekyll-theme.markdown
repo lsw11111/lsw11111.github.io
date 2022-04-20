@@ -9,7 +9,7 @@ author: Mr. Green's Workshop
 # multiple category is not supported
 category: 스프링
 # multiple tag entries are possible
-tags: [jekyll, new feature]
+tags: []
 # thumbnail image for post
 img: ":mock1.jpg"
 # disable comments on this page

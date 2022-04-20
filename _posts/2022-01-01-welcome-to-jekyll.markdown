@@ -9,7 +9,7 @@ author: Jekyll
 # multiple category is not supported
 category: 스프링
 # multiple tag entries are possible
-tags: [jekyll, example post, sample, test]
+tags: []
 # thumbnail image for post
 img: ":post_pic3.jpg"
 # disable comments on this page
