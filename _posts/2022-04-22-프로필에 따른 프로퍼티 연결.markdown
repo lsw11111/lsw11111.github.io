@@ -1,0 +1,137 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[스프링]프로필에 따른 properties 연결"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 스프링
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-22 10:50:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# properties파일 만들기
+resource아래에 globals폴더를 만들고   
+global-dev.properties, global-local.properties, global-prod.properties 파일 작성   
+```
+uploadFile.path = C:/dev/upload/
+uploadFile.resourcePath = /upload/
+scheduler.cron.test = */250 * * * * *
+```
+dev이외의 파일에는 프로필에 따라 다르게 할 부분만 수정한다   
+
+
+<br/>
+
+# config클래스 작성   
+```
+public class GlobalConfig {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private ApplicationContext context;
+    // 스프링 컨테이너와 연결
+    @Autowired
+    private ResourceLoader resourceLoader;
+    // 리소스 호출객체?와 연결
+
+    private String uploadFilePath;
+    private String uploadResourcePath;
+    private String schedulerCronTest;
+    private boolean local;
+    private boolean dev;
+    private boolean prod;
+
+    @PostConstruct
+    public void init() {
+        logger.info("init");
+        String[] activeProfiles = context.getEnvironment().getActiveProfiles();
+        String activeProfile = "local";
+
+        if (ObjectUtils.isNotEmpty(activeProfiles)) {
+            activeProfile = activeProfiles[0];
+        }
+    // 개발, 운영, 로컬서버에 따라 아래 경로가 달라진다
+        String resourcePath = String.format("classPath:globals/global-%s.properties", activeProfile);
+        try {
+            Resource resource = resourceLoader.getResource(resourcePath);
+            Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+            uploadFilePath = properties.getProperty("uploadFile.path");
+            uploadResourcePath = properties.getProperty("uploadFile.resourcePath");
+            schedulerCronTest = properties.getProperty("scheduler.cron.test");
+            this.local = activeProfile.equals("local");
+            this.dev = activeProfile.equals("dev");
+            this.prod = activeProfile.equals("prod");
+        } catch (Exception e) {
+            logger.error("e", e);
+        }
+    }
+
+    public boolean isLocal(){
+        return local;
+    }
+    public boolean isDev(){
+        return dev;
+    }
+    public boolean isProd(){
+        return prod;
+    }
+
+    public String getUploadFilePath() {
+        return uploadFilePath;
+    }
+
+    public String getSchedulerCronTest() {
+        return schedulerCronTest;
+    }
+
+    public String getUploadResourcePath() {
+        return uploadResourcePath;
+    }
+}
+```
+
+# WebConfiguration클래스에 스프링빈으로 등록
+```
+@Bean
+    public GlobalConfig config() {
+        return new GlobalConfig();
+    }
+```
+   <br/>
+
+
+
+

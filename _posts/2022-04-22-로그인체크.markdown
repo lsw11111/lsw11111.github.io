@@ -1,0 +1,94 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[스프링]로그인 체크"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 스프링
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-22 10:23:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 애너테이션 만들기   
+framework.web.bind.annotation패키지 만들고 클래스 작성   
+```
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface RequestConfig {
+
+    boolean loginCheck() default true;
+
+    // ?
+}
+```
+<br/>
+
+# 핸들러클래스에 로그인 체크 조건추가   
+```
+public class BaseHandlerInterceptor implements HandlerInterceptor {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        logger.info("preHandle requestURI : {}", request.getRequestURI());
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            logger.info("handlerMethod : {}", handlerMethod);
+            RequestConfig requestConfig = handlerMethod.getMethodAnnotation(RequestConfig.class);
+            if (requestConfig != null) { // 로그인 체크가 필수인 경우
+                if (requestConfig.loginCheck()) {
+                    throw new BaseException(BaseResponseCode.LOGIN_REQUIRED, new String[]{request.getRequestURI()});
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        logger.info("postHandle requestURI : {}", request.getRequestURI());
+
+    }
+}
+```
+그리고 컨트롤러 클래스에서 로그인체크기능을 넣을 메서드에 @RequestConfig를 넣는다   
+
+   <br/>
+
+
+
+

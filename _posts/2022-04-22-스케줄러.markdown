@@ -1,0 +1,86 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[스프링]스케줄러"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 스프링
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-22 10:52:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 메인클래스에 애너테이션 추가
+@EnableScheduling
+
+# 스케줄러 관리 패키지 작성
+scheduler패키지를 만들고 그 아래에 스케줄러 클래스를 만든다   
+```
+@Component
+public class TestScheduler {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Scheduled(cron = "#{@schedulerCronTest}")
+    public void schedule1() {
+        logger.info("schedule1 동작중 : {}", Calendar.getInstance().getTime());
+    }
+}
+```
+<br/>
+
+# 프로필에 따라 다르게 작동하게 하기
+작성해놓은 global-dev.properties, global-local.properties, global-prod.properties파일에   
+scheduler.cron.test = */120 * * * * *   
+이 항목을 프로필에 따라 다르게 설정한다   
+   <br/>
+
+# 스케줄러 설정클래스 작성
+```
+@Configuration
+public class SchedulerCronConfiguration {
+
+    @Autowired
+    private GlobalConfig config;
+
+    @Bean
+    public String schedulerCronTest(){
+        return config.getSchedulerCronTest();
+    }
+}
+```
+
+
+
+

@@ -1,0 +1,283 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[스프링]파일 업로드 구현"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 스프링
+# multiple tag entries are possible
+tags: [library]
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-22 11:15:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# aplication.properties에 내용추가
+```
+spring.mvc.view.prefix = /WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+```
+
+<br/>
+
+# jsp파일을 넣을 폴더작성   
+main아래에 webaap아래에 WEB-INF아래에 views아래에 index.jsp파일을 작성한다   
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ <form action="/file/save" method="post" enctype="multipart/form-data">
+    <input type="file" name="uploadFile" />
+    <button type="submit">파일업로드</button>
+ </form>
+</body>
+</html>
+```
+
+# 파일컨트롤러 클래스 작성
+```
+@RestController
+@RequestMapping("/file")
+@Api(tags = "파일 API")
+public class FileController {
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+
+    @Autowired
+    private GlobalConfig config;
+
+    @Autowired
+    private UploadFileService uploadFileService;
+
+    @PostMapping("/save")
+    @ApiOperation(value = "업로드", notes = "")
+    public BaseResponse<Boolean> save(@RequestParam("uploadFile") MultipartFile multipartFile) {
+        logger.debug("multipartFile : {}", multipartFile);
+
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new BaseException(BaseResponseCode.DATA_IS_NULL);
+        } // 필수체크
+
+        String currentDate = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+        String uploadFilePath = config.getUploadFilePath() + currentDate + "/"; //날짜폴더 추가
+        logger.debug("uploadFilePath : {}", uploadFilePath);
+
+        String prefix = multipartFile.getOriginalFilename()
+                .substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1, multipartFile.getOriginalFilename().length());
+        String filename = UUID.randomUUID() + "." + prefix;
+        // 랜덤 파일명+확장자 가져옴
+        logger.info("filename : {}", filename);
+
+        File folder = new File(uploadFilePath);
+        if (!folder.isDirectory()) {
+            folder.mkdirs();
+        } // 디렉토리가 없다면 작성
+        String pathname = uploadFilePath + filename;
+        String resourcePathname = config.getUploadResourcePath() + currentDate + "/" + filename;
+        File dest = new File(pathname);
+        logger.debug("dest : {}", dest);
+        try {
+            multipartFile.transferTo(dest);
+            UploadFileParameter parameter = new UploadFileParameter(); // 업로드하고 DB에 저장
+            parameter.setContentType(multipartFile.getContentType()); // 컨텐츠 종류
+            parameter.setOriginalFilename(multipartFile.getOriginalFilename()); //원본 파일명
+            parameter.setFilename(filename); // 저장파일명
+            parameter.setPathname(pathname); // 저장경로
+            parameter.setSize((int) multipartFile.getSize());
+            parameter.setResourcePathname(resourcePathname); // static resource 접근경로 (브라우저)
+            uploadFileService.save(parameter);
+        } catch (IllegalStateException | IOException e) {
+            logger.error("e", e);
+        }
+        return new BaseResponse<Boolean>(true);
+    }
+
+}
+```
+
+# DB에 파일정보를 넣을 테이블 작성
+```
+CREATE TABLE T_UPLOAD_FILE (
+ UPLOAD_FILE_SEQ INT NOT NULL AUTO_INCREMENT COMMENT '파일 고유번호',
+ PATHNAME VARCHAR(100) NOT NULL COMMENT '전체경로',
+ FILENAME VARCHAR(50) NOT NULL COMMENT '파일명',
+ ORIGINAL_FILENAME VARCHAR(100) NOT NULL COMMENT '원본 파일명',
+ SIZE INT NOT NULL COMMENT '파일크기',
+ CONTENT_TYPE VARCHAR(50) NOT NULL COMMENT '컨텐츠 종류',
+ RESOURCE_PATHNAME VARCHAR(100) NOT NULL DEFAULT '' COMMENT '리소스 파일경로',
+ REG_DATE DATETIME NOT NULL COMMENT '등록일자',
+ PRIMARY KEY (UPLOAD_FILE_SEQ) USING BTREE
+)
+COMMENT='파일'
+ENGINE=InnoDB
+AUTO_INCREMENT=4
+;
+```
+
+# 쿼리를 날릴 xml파일 작성
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lsj.lsjspring.repository.UploadFileRepository">
+
+    <select id="get" parameterType="int" resultType="lsj.lsjspring.domain.UploadFile">
+        SELECT
+            PATHNAME,
+            FILENAME,
+            ORIGINAL_FILENAME,
+            SIZE,
+            CONTENT_TYPE,
+            RESOURCE_PATHNAME,
+            REG_DATE
+        FROM T_UPLOAD_FILE UF
+        WHERE UF.UPLOAD_FILE_SEQ = #{uploadFileSeq}
+    </select>
+
+    <insert id="save" parameterType="lsj.lsjspring.parameter.UploadFileParameter">
+        INSERT INTO T_UPLOAD_FILE
+        (
+            PATHNAME,
+            FILENAME,
+            ORIGINAL_FILENAME,
+            SIZE,
+            CONTENT_TYPE,
+            RESOURCE_PATHNAME,
+            REG_DATE
+        )
+        VALUES
+        (
+            #{pathname},
+            #{filename},
+            #{originalFilename},
+            #{size},
+            #{contentType},
+            #{resourcePathname},
+            NOW()
+        )
+    </insert>
+</mapper>
+
+```
+
+# 파일의 정보를 담을 도메인, 파라미터 클래스 작성
+```
+@Data
+public class UploadFileParameter {
+
+    private String pathname;
+    private String filename;
+    private String originalFilename;
+    private int size;
+    private String contentType;
+    private String resourcePathname;
+
+}
+```
+```
+@Data
+public class UploadFile {
+
+    private int uploadFileSeq;
+    private String pathname;
+    private String filename;
+    private String originalFilename;
+    private int size;
+    private String contentType;
+    private String resourcePathname;
+
+}
+```
+
+# repository, service클래스 작성
+```
+@Repository
+public interface UploadFileRepository {
+
+    void save(UploadFileParameter parameter);
+    UploadFile get(int uploadFileSeq);
+
+}
+```
+```
+@Service
+public class UploadFileService {
+
+    private UploadFileRepository repository;
+
+    @Autowired
+    private UploadFileService(UploadFileRepository repository) {
+        this.repository = repository;
+    }
+
+    public void save(UploadFileParameter parameter) {
+        repository.save(parameter);
+    }
+
+    public UploadFile get(int uploadFileSeq) {
+        return repository.get(uploadFileSeq);
+    }
+}
+```
+
+# 리소스 접근경로 설정
+global-local.xml(프로필 마다 달라질수 있음)에서   
+uploadFile.resourcePath 설정   
+
+# WebConfiguration클래스에서 메서드 Override
+```
+@Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 업로드 파일 static resource 접근경로
+        String resourcePattern = config.getUploadFilePath() + "**";
+
+        if (config.isLocal()) {
+            registry.addResourceHandler(resourcePattern).addResourceLocations("file:///" + config.getUploadFilePath());
+            // 로컬(윈도우 환경)
+        } else {
+            registry.addResourceHandler(resourcePattern).addResourceLocations("file:" + config.getUploadFilePath());
+        } // 리눅스, 유닉스 환경
+    } // 위 소스를 구현하면 브라우저에서 접근가능(url로 업로드 파일보기 가능)
+```
+
+
+   <br/>
+
+
+
+
