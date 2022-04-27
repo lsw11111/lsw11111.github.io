@@ -1,0 +1,221 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]제네릭"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":자바.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-28 07:30:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 제네릭이란
+컴파일시 타입을 체크해주는 기능. <>에 타입넣음
+객체의 타입안정성을 높이고 형변환의 번거로움을 줄여줌
+형 변환을 생략 - 코드가 간결해짐
+런타임 에러 발생 줄이고 컴파일시 체크할수 있게 함
+```
+		ArrayList<Object> list = new ArrayList<>();
+		
+		list.add(10); // new Integer(10);로 오토 박싱
+		list.add(20); // 기본자료형으로 넣었으나 자동적으로 객체형이 됨
+		list.add("30");
+		// <Integer>시 타입 체크 - 오류
+		// <Obejct>시 다 들어감
+		
+		String str = (String)list.get(2);
+		int num = (Integer)list.get(0);
+		// ArrayList의 요소가 Object형이므로 형 변환을 해줘야 변수선언가능
+		
+		System.out.println(list);
+		// <>에 아무것도 없으면 런타임 에러(예외). 컴파일러의 한계
+		
+		// 예외를 줄이기 위한 변수 선언방법
+		String string = null;
+		String string2 = "";
+		string.length(); // NullPointException
+		string2.length(); // 0
+		
+		Object[] objarr = new Object[0]; //길이가 0인 배열
+```
+<br/>   
+
+# 제네릭 용어
+T 타입 변수
+Box 원시 타입(일반 클래스)
+```
+Box<T> 지네릭스 클래스 'T의 Box' 'T Box'라고 읽음
+
+		 Box<String> b = new Box<String>();
+		 <>안의 것이 반드시 일치해야됨
+		 
+		 제네릭 클래스간의 다형성 성립
+		 List<Tv> list = new ArrayList<Tv>;
+		 List<Tv> list = new LinkedList<Tv>;
+		 
+		 매개변수의 다형성도 성립
+		 class Product {}
+		 class Tv extends Product {}
+		 class Audio extends Product {}
+		 
+		 ArrayList<Pruduct> list = new ArrayList<Product>();
+		 list.add(new Product());
+		 list.add(new Tv());
+		 list.add(new Audio());
+		 
+		 (자손클래스의 경우)꺼내서 변수선언 할때는 형 변환 필요
+		 Tv tv = (Tv)list.get(0);
+```		 
+
+# 간단한 예
+```
+class Product {}
+class Tv2 extends Product{}
+class Audio2 extends Product{}
+
+public class GenericEx_4 {
+
+	public static void main(String[] args) {
+		ArrayList<Product> pList = new ArrayList<Product>();
+		ArrayList<Tv2> tvList = new ArrayList<Tv2>();
+		ArrayList<Product> tvList2 = new ArrayList<Tv2>(); // Product타입만 받음 - 에러
+		ArrayList<? extends Proudct> tvList3 = new ArrayList<Tv2>(); // 와일드 카드를 써서 자식클래스 가능하게 함
+		List<Tv2> tvList3 = new ArrayList<Tv2>(); // 다형성
+		
+		pList.add(new Tv2());
+		pList.add(new Audio2());
+		
+		tvList.add(new Tv2());
+		tvList.add(new Tv2());	
+		
+		
+		printAll(pList);
+		printAll(tvList); // 메서드 정의시 Product타입만 받는다고 선언 - 에러
+	}
+
+	private static void printAll(ArrayList<Product> list) {
+		for(Product p: list) {
+//			if(p instanceof Tv2) {
+//				p = (Tv2)p;
+//				System.out.println(p);
+//				continue;
+				System.out.println(p);
+			}			
+		} 
+	}
+```
+
+# <>의 범위 넓히기
+```
+<T extends 부모클래스>
+```
+
+부모클래스나 그 상속을 받은 클래스만 들어갈수 있게 제한
+인터페이스로부터 상속을 받은것도 extends를 쓴다
+
+예시
+```
+interface Eatable{}
+class Fruit implements Eatable{	
+	public String toString() {
+		return "Fruit";
+	}
+}
+
+class Apple extends Fruit{
+	public String toString() {
+		return "Apple";
+	}
+}	
+
+class Grape extends Fruit{
+	public String toString() {
+		return "Grape";
+	}
+}	
+
+class Toy {
+	public String toString() {
+		return "Toy";
+	}
+}
+
+class FruitBox<T extends Fruit & Eatable> extends Box<T>{
+	// 앞extends - T의 조건, 뒤 extends - Box<T>의 인스턴스 상속
+}
+
+class Box<T> { // T에 아무거나 들어올수 있음
+//	ArrayList<T> list;
+//	
+//	Box () {
+//		list = new ArrayList<T>();
+//	}
+	ArrayList<T> list = new ArrayList<T>();
+	void add(T t) {
+		list.add(t);
+	}
+	T get(int i) {
+		return list.get(i);
+	}
+	int size() {
+		return list.size();
+	}
+	public String toString() {
+		return list.toString();
+	}
+}
+public class Limitted_Generic_7 {
+	
+	public static void main(String[] args) {
+	FruitBox<Fruit> fruitBox = new FruitBox<Fruit>();
+	fruitBox.add(new Apple());
+	fruitBox.add(new Grape());
+//  fruitBox.add(new Toy()); // Fruit와 Eatable의 상속을 받은것만 들어올수 있음 - 못 들어옴
+//	FruitBox<Toy> toyBox = new FruitBox<Toy>(); // 못 만듦
+
+	Box<Toy> toyBox2 = new Box<Toy>();
+
+	System.out.println(fruitBox.get(0));
+	
+	
+	
+}
+	
+
+}
+```
+
+
+
+

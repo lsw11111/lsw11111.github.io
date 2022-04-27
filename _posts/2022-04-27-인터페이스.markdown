@@ -11,7 +11,7 @@ category: 자바
 # multiple tag entries are possible
 tags: []
 # thumbnail image for post
-img: ":post_pic1.jpg"
+img: ":자바.png"
 # disable comments on this page
 #comments_disable: true
 
@@ -93,7 +93,7 @@ public interface Calc {
 	
 	// 인터페이스에는 상수와 추상메서드가 들어감
 }
-
+```
 
 
 
