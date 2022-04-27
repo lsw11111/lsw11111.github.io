@@ -1,0 +1,140 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]조건문"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 07:00:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# if 조건문
+()안에 결과(boolean)값에 따라 다른 수행문이 실행되도록 한다   
+```
+int age = 6;
+int charge = 0;
+
+if(age < 8) {
+	charge = 1000;
+	System.out.println("미취학 아동입니다");
+} else if (age < 13) {
+	charge = 2000;
+	System.out.println("초등학생입니다");
+  } else if (age < 20) {
+ 		charge = 2500;
+		System.out.println("중고등학생입니다");
+		} else {
+			charge = 3000;
+			System.out.println("성인입니다");
+		}
+		System.out.println("입장료는 " + charge + "원 입니다");
+```
+age가 6이므로 if(age < 8)의 실행문이 실행되고 나머지는 무시된다   
+
+# switch-case문
+조건식의 결과가 간단한 정수나 문자열이고   
+값에 따라 수행문이 결정될때 쓰인다   
+```
+int rank = 2;
+		
+switch(rank) {
+	case 1 : System.out.println("금메달입니다");
+	break;
+	case 2 : System.out.println("은메달입니다 22!!");
+	break;
+	case 3 : System.out.println("동메달입니다");
+	break;
+	default : System.out.println("순위권밖입니다");
+}
+```
+break;를 넣어서 switch문을 빠져나오게 한다   
+<br/>
+
+# while 반복문
+```
+int num = 1;
+int sum = 0;
+		
+while (num <= 10) {
+	sum += num++;
+}
+System.out.println(sum);
+```
+
+1부터 10까지의 합을 구하는 간단한 반복문   
+num이 11이 되는 순간 반복문을 빠져나온다   
+<br/>
+
+이를 활용한 구구단 찍기   
+```
+    int dan = 2;
+		int times = 1;
+		
+		while (dan < 10) {
+			times = 1;
+			while (times < 10) {
+				System.out.println(dan + " * " + times + " = " + dan * times);
+				times += 1;
+			}
+			System.out.println();
+		dan += 1;
+		}
+```
+
+# for반복문
+```
+int sum = 0;
+		
+for (int i = 0; i < 11; i++) {			
+	sum += i;
+}
+System.out.println(sum);
+```
+1부터 10까지의 합을 구하는 간단한 반복문   
+이를 활용한 구구단 찍기
+```
+for (int i = 2; i < 10; i++) {
+			for (int j = 1; j < 10; j++) {
+				System.out.println(i + " * " + j + " = " + i * j);
+			}
+			System.out.println();
+		}
+```
+
+
+
+
+
+

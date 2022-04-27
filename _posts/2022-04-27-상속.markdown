@@ -1,0 +1,60 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]상속"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 08:40:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 상속
+클래스를 정의할때 이미 구현된 클래스를 상속받아서   
+속성, 메서드를 쓸수있는 클래스를 구현(@Override)   
+<br/>
+
+# 상속 문법
+class B extends A {}   
+A로부터 B가 상속받음   
+extends뒤에는 단 하나의 class만 사용가능   
+B가 A보다 더 구체적인 의미   
+<br/>   
+
+  
+
+
+
+
+

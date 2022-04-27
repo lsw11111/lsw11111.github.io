@@ -1,0 +1,173 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]기본자료형"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 06:00:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 변수 선언
+```
+int num;
+num = 10; // =는 대입 연산자
+
+int level = 20;
+System.out.println(level);
+변수이름은 알파벳, 숫자, _, $로 구성. 대소문자 구분함
+숫자로 시작할수 없음
+키워드(static, final, void , if, while, for 등) 사용불가. 공백 안됨
+변수가 어떤걸 담고있는지 의미를 확실히 알수있어야함
+```
+
+# 진수 표현
+```
+int num = 10;
+int bNum = 0B1010; // 0B쓰면 2진수
+int oNum = 012; // 0쓰면 8진수
+int hNum = 0xA; //OX쓰면 16진수
+```
+<br/>
+
+# 정수 자료형
+각 자료형의 범위는 다음과 같다   
+byte -128 ~ 127   
+short -32768 ~ 32767   
+int -2147483648 ~ 2147483647   
+long -9223372036854775808 ~ 9223372036854775807   
+거의 int나 long을 사용하고 byte와 short는 잘 사용되지 않는다   
+```
+byte bData2 = 128;
+위와같이 범위에서 벗어난 숫자를 변수로 선언하려고 하면 에러표시가 뜬다
+
+long num = 12345678900L;
+리터럴은 기본 4바이트 이므로 l 혹은 L을 입력해야 인식된다
+```
+리터럴이란?   
+프로그램에서 사용되는 모든 숫자,문자,논리값   
+리터럴은 특정메모리 공간인 상수풀(constrant pool)에 저장돼있다   
+변수를 선언할때 상수풀에서 복사해오는것   
+상수풀에서 정수는 int 실수는 double로 저장돼있으므로   
+long이나 long이나 float값을 변수로 선언하려면 식별자L 또는 F를 붙인다   
+
+# 문자 자료형
+char - 문자 자료형   
+자바에서 문자는 2바이트로 처리   
+인코딩 - 문자를 특정 숫자값(코드값) 부여   
+디코딩 - 숫자값을 원래 문자로 변환   
+
+문자세트   
+문자를 위한 코드값들을 정해놓은 세트   
+ASCII(1바이트) 유니코드(국제표준)   
+문자를 변수에 저장하면 문자에 해당하는 코드값이 저장됨   
+자바는 유니코드 UTF-16으로 인코딩   
+
+</br>
+```
+char ch1 = 'A';
+System.out.println(ch1);
+// 문자 출력
+System.out.println((int)ch1);
+// A라는 문자에 해당하는 아스키 코드값
+int ch2 = 67;
+System.out.println(ch2);
+System.out.println((char)ch2);
+// 정수값 66에 해당하는 문자 출력
+```
+
+# 실수 자료형
+float - 4바이트   
+double - 8바이트   
+```
+double dNum = 3.14;
+float fNum = 3.14f;
+```
+실수는 double이 기본   
+부동 소수점 방식   
+굳이 float형으로 쓰려면 숫자 뒤에 f,F를 명시   
+
+# 형 변환
+```
+int iNum = 1000;
+byte bNum = (byte)iNum;
+이런경우 데이터 유실이 발생(큰 자료형에서 작은 자료형으로의 형 변환)
+
+double dNum = 3.14;
+iNum = (int)dNum;
+소수점 뒤 0.14가 유실되고 정수부분만 대입됨
+```
+		
+# 논리형 자료형
+논리형 boolean   
+true,false를 표현하는 자료형   
+boolean 으로 선언   
+```
+boolean isMarried = false;
+System.out.println(isMarried);
+```
+
+# 자료형 없이 변수사용
+var dNum2 = 3.14;   
+var로 선언했으나 자료형 추론으로 double임을 인식    
+한번 정한 변수의 타입은 바뀔수 없음   
+예를들면 실수형-> 정수형 불가능   
+var dNum = 3;   
+ 
+자료형이 필요한 이유:   
+변수를 선언할때 변수가 사용할 메모리 크기,    
+타입을 구분하려 자료형사용   
+<br/>
+지역변수 자료형 추론:   
+변수에 대입되는 값을 보고 컴파일러가 추론   
+<br/>
+지역변수란?   
+{}안에서 선언되는 변수   
+밖에서는 자료형 추론 불가능   
+{}안에서만 사용가능하다   
+
+# 상수
+변하지 않는 절대값. 대문자로 쓴다
+```
+final int MAX_NUM = 100;
+final float PI = 3.14F;
+```
+굳이 바꾸려면 최초 선언된 구문에서 바꾼다
+
+<br/>
+
+
+
+

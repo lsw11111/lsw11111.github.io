@@ -1,0 +1,101 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]다형성"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 08:54:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 다형성?
+여러 형태를 가지는 능력   
+조상타입 참조변수로 자손타입 객체를 다루는것   
+<br/>
+
+# 간단한 예제
+```
+class Tv {
+    boolean power;
+    int channel;
+
+    void power() {
+        power = !power;
+    }
+
+    void channelUp() {
+        ++channel;
+    }
+
+    void channelDown() {
+        --channel;
+    }
+
+}
+
+class SmartTv extends Tv {
+    String text;
+
+    void caption() {        
+    }
+}
+```
+Tv와 Tv의 상속을 받는 SmarTv를 구현   
+```
+public class Tv_test {
+
+	public static void main(String[] args) {
+
+		Tv smTv = new SmartTv();
+		 SmarTv의 인스턴스를 호출했지만 Tv의 인스턴스만
+		 사용할수있는 인스턴스 사용 제한
+		 버튼은 있지만 못누르게 된 상태
+		
+		
+    SmartTv tv = new Tv(); // 이런 형태는 성립할수 없음
+		 Tv의 형태를 하고 있으니 당연히 SmartTv의
+		 인스턴스를 쓸수없음
+		 없는 버튼이라서 누를수가 없음
+	}
+
+}
+```
+
+  
+
+
+
+
+

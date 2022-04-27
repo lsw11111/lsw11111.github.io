@@ -1,0 +1,100 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]인터페이스"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 09:05:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 인터페이스란
+모든 메서드가 추상메서드인 클래스
+형식선언만 하고 실행식{}은 없음
+모든 메서드는 public abstract
+메서드 앞에 안적어도 컴파일할때 자동으로 들어감
+인터페이스로부터 상속을 받을땐 implements
+
+인터페이스를 기반으로 구현된 메서드를 가져다쓰는 클래스를
+클라이언트 클래스(이 패키지내의 CalcTest)
+<br/>   
+
+
+# 인터페이스의 요소
+상수 : 모든 변수는 상수로 변환됨   
+추상 메서드 : 하위 클래스에서 반드시 재정의 해야하는 메서드();   
+디폴트 메서드 : default가 붙음. {} 까지 들어감   
+하위 클래스에서 재정의 할수도 있고 안하면   
+인터페이스의 것이 실행되는 메서드   
+extends를 이용한 상속에서와 같이 오버라이드 가능   
+정적 메서드 : static이 붙음. 생성자를 호출하지 않아도   
+인터페이스에서 정의된걸 쓸수있는 메서드   
+private 메서드 : 인터페이스 클래스에서 사용하고   
+하위클래스에서 재정의할수 없음   
+인터페이스 내부에서만 기능을 제공하기위해 구현함   
+인터페이스와 인터페이스간의 상속도 가능한데   
+이때는 extends를 쓴다(여러 인터페이스로부터 상속가능)   
+
+# 간단한 예
+```
+public interface Calc {
+  double PI = 3.14;
+	int ERROR = -9999999;
+	// 기본자료형 - 안적어도 public static final이 들어가 있음
+	
+	int add(int num1,int num2);
+	int substract(int num1,int num2);
+	int times(int num1,int num2);
+	int devide(int num1,int num2);
+	
+	default void description() {
+		System.out.println("정수 계산기를 구현합니다");
+	}
+
+	static int total(int[] arr) {
+		int total = 0;
+		for (int aa : arr) {
+			total += aa;
+		}
+		return total;
+	}
+	
+	// 인터페이스에는 상수와 추상메서드가 들어감
+}
+
+
+
+
+

@@ -1,0 +1,88 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]연산자"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 06:30:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 연산자 종류
+항: 연산에 사용되는값   
+연산자: 연산기호   
+단항연산자: 항이 1개 ++num   
+이항연산자: 항이 2개 num1 + num2   
+삼항연산자: 항이 3개 (5>3) ? 1:0;   
+<br/>
+대입연산자 =   
+변수에 값을 대입하는 연산자   
+연산자중 우선순위 제일낮음   
+부호 연산자 +- 양수/음수 표현, 값의 부호 변경   
+산술연산자 % 나눈후 나머지 값   
+<br/>
+증감연산자 ++, --   
+```
+    int num = 10;
+		System.out.println(num++);
+		// 출력후에 +1
+		System.out.println(num);
+		System.out.println(--num);
+		// -1하고나서 출력
+```
+관계연산자 >, <, == : 결과값이 boolean
+<br/>
+논리연산자   
+%% 앞뒤 둘다 만족시켜야 true
+|| 둘중 하나만 true여도 true
+!  부정. true면 false로 바꾸고 false면 true로 바꾼다   
+<br/>
+복합대입 연산자: +, -, *, /, % 연산후 대입   
+<br/>
+조건연산자 ? : 조건식의 결과에 따라 boolean으로 반환
+반환된 값에 따라 다른 결과를 수행, if문으로 쓰기엔 간단한 경우에 쓴다   
+```
+    int num = (5 < 3) ? 10 : 20;
+		System.out.println(num);
+		// true면 앞의 10 false면 뒤의 20가 대입됨
+```   
+
+
+
+<br/>
+
+
+
+

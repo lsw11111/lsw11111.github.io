@@ -1,0 +1,62 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]접근제어자"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 07:35:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 접근제어자의 종류
+private : 같은 클래스 내에서만 접근 가능   
+호출이나 수정이 필요한 경우 get(), set() 메서드를 쓰고 수정을 제한할 경우 get()만 구현한다   
+->이를 '캡슐화'라고 한다   
+deafult : 같은 패키지 내에서만 접근 가능   
+접근제어자를 지정하지 않았다면 자동으로 deafult로 지정된다   
+protected : 같은 패키지 내에서, 그리고 다른 패키지의 자손클래스에서 접근이 가능하다   
+public : 접근 제한이 전혀 없다   
+<br/>
+표로 정리하면 아래와 같다   
+![table](:접근제어자.png)
+
+<br/>   
+
+  
+
+
+
+
+

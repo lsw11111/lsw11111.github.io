@@ -1,0 +1,95 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]메서드"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":post_pic1.jpg"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-27 07:25:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+# 메서드의 정의
+함수의 일종, 객체의 기능을 제공하기 위한 함수   
+함수는 하나의 기능을 수행, 중복되는 기능은 함수에서 함수를 호출해서 사용   
+
+메서드의 형태   
+```
+			int(반환형) add(메서드의 이름) (int num1, int num2) {
+		 		int result;
+		 		result = num1 +num2;
+		 		return result;  
+		 	}
+```
+return 은 반환되는 값, 반환값이 없을경우(어떤 기능만 수행 할경우) 반환형을 void라고 쓴다   
+<br/>
+스택메모리 구조   
+함수가 호출될때 사용하는 메모리, 위로 쌓이는 형태   
+함수의 기능수행이 끝나면 자동으로 반환된다   
+<br/>
+
+# 생성자 함수
+생성자 함수의 이름은 클래스의 이름과 같다   
+```
+public class Constructor {
+	String name;
+	float weight;
+	float height;
+	
+	public Constructor() {}
+
+	public Constructor() {
+		this("이름 없음", 0, 0);
+	}
+		
+	public Constructor(String name, float personWeight, float personHeight) {
+		this.name = name;
+		this.weight = personWeight;
+		this.height = personHeight;
+	}
+}
+```
+생성자의 매개변수에 아무것도 없는 경우   
+자바 컴파일러가 자동으로 생성해주는 디폴트 생성자로 작성하지 않아도 적용되어 있다   
+기본매개변수가 없고 구현코드도 없음. 생성자가 하나도 없으면 생기고 하나라도 있으면 안생김   
+디폴트 필드값을 설정해줄 경우엔 구현부에 this()를 넣는다   
+<br/>
+생성자에 매개변수를 넣는 경우   
+생성자에 매개변수를 넣으면 참조변수(객체) 생성시에 넣은값이 해당 필드에 대입됨   
+필요에 따라 같은 이름의 생성자를 생성하는데 매개변수를 달리 해줘야함 = 생성자 오버로드   
+
+
+
+
+
