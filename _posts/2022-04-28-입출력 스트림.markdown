@@ -1,0 +1,214 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]입출력 스트림"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":자바.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-28 09:23:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 출력 스트림
+바이트 단위스트림 - OutputStream   
+바이트단위 출력용 최상위 스트림   
+추상 메서드를 포함한 추상클래스로 하위 클래스가 구현하여 사용   
+<br/>
+주요 하위클래스
+FileOutputStream 바이트 단위로 파일에 자료를 쓴다   
+ByteArrayOutputStream Byte배열에 바이트 단위로 자료를 쓴다   
+FilterOutputStream 기반스트림에서 자료를 쓸때 추가기능을   
+제공하는 보조스트림의 상위 클래스   
+<br/>
+메서드
+void write(int b) 한 바이트를 출력   
+void write(byte[] b) b[]배열에 있는 자료를 출력   
+void write(byte b[], int off, int len)   
+b[]배열에 있는 자료의 off위치부터 len개수만큼 출력   
+void flush() 출력을 위해 잠시 자료가 머무르는 출력버퍼를   
+강제로 비워 자료를 출력   
+void close() 출력스트림과 연결된 대상 리소스를 닫음   
+출력버퍼가 비워진다   
+
+# 사용 예
+```
+public static void main(String[] args) {		
+		
+		byte[] bs = new byte[26];
+		byte data = 65;
+		for (int i = 0; i < bs.length; i++) {
+			bs[i] = data++;
+		}
+	
+		try(FileOutputStream fos = new FileOutputStream("output.txt",true)){
+			// 기본 false - 덮어쓰기 true를 쓰면 이어쓰기
+			fos.write(bs, 2, 10);
+		}
+		catch (IOException e) {
+			System.out.println(e);
+		}
+		
+		System.out.println("end");
+		
+	}
+```
+아래는 FileWritter클래스를 사용한 예
+```
+public class FileWriterTest {
+	public static void main(String[] args) {
+		
+		try(FileWriter fw = new FileWriter("writter.txt")) { // false:덮어쓰기, true: 이어쓰기
+			fw.write("A");
+			char[] ch = {'B','C','D'};
+			fw.write(ch);
+			fw.write("ㅎㅇ");
+			fw.write(ch,1,2);
+			
+		} catch (IOException e) {
+			System.out.println(e);
+		}		
+	}
+}
+```
+
+# 입력 스트림
+FileReader클래스를 활용한 파일 읽어오기 예시
+```
+public class FileInputStreamTest {
+
+	public static void main(String[] args) {
+		
+		FileReader fis = null;
+		int i  = 0;
+		try {
+		fis = new FileReader("input.txt");
+		
+		while((i = fis.read()) != -1) {
+			System.out.print((char)i);
+		}
+				
+		}
+		catch (IOException e){
+			System.out.println(e);
+		}
+		finally {
+			try {
+				fis.close();
+			} catch (IOException e) {				
+				System.out.println(e);
+			} catch(NullPointerException e) {
+				System.out.println(e);
+			}
+			
+		}
+		System.out.println("\nend");		
+	}
+
+}
+```
+FileInputStream클래스를 활용한 파일 읽어오기 예시
+```
+public class FileInputStreamTest {
+	
+	public static void main(String[] args) {
+	
+	try(FileInputStream fis = new FileInputStream("input2.txt")){
+		byte[] bs = new byte[10];
+		int i;
+		while((i = fis.read(bs)) != -1) { // bs의 길이만큼 읽어서 배열에 넣음
+			for(int j = 0; j < i; j++) {
+				System.out.print((char)bs[j]); 
+			}
+			System.out.println();
+		}
+	}
+	catch(IOException e) {
+		System.out.println(e);
+	}
+	
+	}
+}
+
+```
+
+# 보조스트림
+실제 읽고쓰는 스트림이 아닌 보조기능을 추가하는 스트림   
+InputStreamReader   
+OutputStreamWriter   
+바이트단위로 읽거나 쓰는 자료를 문자로 변환해주는 보조스트림   
+```
+		try(InputStreamReader irs = new InputStreamReader(new FileInputStream("reader.txt"))){
+			// 보조스트림의 생성자안에 기반스트림의 생성자를 넣음
+			// byte 타입을 문자로 바꿔주는것
+			int i = 0;
+			while((i = irs.read()) != -1) {
+				System.out.print((char)i);
+			}
+			System.out.println();
+		} catch (IOException e) {
+			System.out.println(e);
+		} 
+```
+읽고 쓰는 속도를 빠르게 해주는 Buffered 보조스트림
+```
+public class FileCopyTest {
+
+	public static void main(String[] args) {
+		
+		long milliSeconds = 0;
+		int len = 0;
+		try (FileInputStream fis = new FileInputStream("a.exe");
+				FileOutputStream fos = new FileOutputStream("b.exe");
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				BufferedOutputStream bos = new BufferedOutputStream(fos) ){
+			// Buffered 보조스트림 - 1byte씩 읽고 쓰던걸 8k?속도로 빠르게
+			
+			milliSeconds = System.currentTimeMillis();
+			int i;
+			while( (i = bis.read()) != -1 ) {
+				bos.write(i);
+				len++;
+			}
+			milliSeconds = System.currentTimeMillis() - milliSeconds;
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		System.out.println(len);
+		System.out.println(milliSeconds);
+	}
+
+}
+```
+
