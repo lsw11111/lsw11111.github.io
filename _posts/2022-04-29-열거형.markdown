@@ -1,0 +1,219 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]열거형"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":자바.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-29 10:35:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 열거형이란
+열거형 관련된 상수들을 묶어놓은것 java는 타입에 안전한 열거형 제공	 
+	 정의하는법 enum 열거형이름 {상수명1,상수명2 ...}	 
+	 열거형 타입의 변수를 선언하고 사용하는법 enum Direction { EAST, SOUTH, WEST, NORTH }
+<br/>
+열거형의 조상 - java.lang.Enum 클래스 Class<E>   
+getDeclaringClass() 열거형 객체 반환, 잘안씀   
+String name() 열거형 상수이름을 문자열로 반환 int ordinal() 열거형 상수가 정의된 순서를 반환(0부터~) T
+valueOf(Class<T> enumType, String name) 지정된 열거형에서 name과 일치하는 열거형 상수를 반환   
+values(), valueOf()는 컴파일러가 자동으로 추가   
+static E[] values() static E 열거형에 들어있는 모든 상수를 배열로 반환   
+valueOf(String name) name의 값을 불러옴   
+
+# 예시1
+```
+class Unit {
+	int x, y;
+	enum Direction { 
+		EAST, 
+		WEST, 
+		SOUTH, 
+		NORTH
+	}
+	Direction dir; // 열거형타입 변수 선언, 위 4개의 값만 들어올수 있다
+	Direction[] dirArr;
+
+	void init() {
+		this.dir = Direction.EAST;
+		// Unit의 Direction을 EAST로 초기화하는 메서드
+	}
+	void moveEast() { 
+		if (dir == Direction.EAST) { // 같은가?는 확인가능
+			this.x++;
+//		} else if (dir > Direction.WEST) {
+//			// 열거형 상수에 비교연산자는 사용불가 - 에러
+		} else if (dir.compareTo(Direction.WEST) < 0) {
+			// compareTo()메서드로 비교가능
+			dir = Direction.EAST; //  방향전환
+		}
+	}
+
+	void makeEnumArr() {
+		this.dirArr = Direction.values();
+	}
+	// Direction 열거형에 들어있는 모든 상수를 배열로 반환
+}
+```
+
+# 예시2
+```
+public class EnumEx_2 {
+	enum Direction {
+		EAST, SOUTH, WEST, NORTH
+	}
+
+	public static void main(String[] args) {
+		Direction dirEast = Direction.EAST;
+		Direction dirWest = Direction.valueOf("WEST"); //
+		Direction dirEast2 = Enum.valueOf(Direction.class, "EAST");
+
+		System.out.println("dirEast = " + dirEast);
+		System.out.println("dirWest = " + dirWest);
+		System.out.println("dirEast2 = " + dirEast2);
+
+		System.out.println("dirEast == dirWest? " + (dirEast == dirWest));
+		System.out.println("dirEast == dirEast2? " + (dirEast == dirEast2));
+		System.out.println("dirEast.equals(dirEast2) ? " + dirEast.equals(dirEast2));
+//	System.out.println(dirWest > dirEast2); // 비교연산자 쓸수없음 - 에러(객체이므로 직접 비교불가)
+		System.out.println("dirEast.compareTo(dirEast2) ? " + (dirEast.compareTo(dirEast2)));
+		System.out.println("dirEast.compareTo(dirWest) ? " + (dirEast.compareTo(dirWest)));
+
+		switch (dirEast) {
+		case EAST: // switch문에선 Direction.EAST 라고 쓸수없다(문법)
+			System.out.println("방향은 EAST");
+			break;
+		case WEST:
+			System.out.println("방향은 WEST");
+			break;
+		case SOUTH:
+			System.out.println("방향은 SOUTH");
+			break;
+		case NORTH:
+			System.out.println("방향은 NORTH");
+			break;
+		}
+		Direction[] dirArr = Direction.values();
+		// 열거형의 모든 상수를 배열로 반환
+		for (Direction dir : dirArr) {
+			System.out.printf("%s = %d%n", dir.name(), dir.ordinal());
+		}
+
+	}
+
+}
+```
+
+# 열거형에 생성자, 필드, 메서드, value추가
+예1
+```
+enum Direction {
+		EAST(1), SOUTH(5), WEST(-1), NORTH(10);
+
+		private int value; // 멤버변수 추가
+
+		Direction(int value) {
+			this.value = value;
+		} // 생성자. 열거형 생성자는 묵시적으로 private으로 외부에서 쓸수없다
+
+		int getValue() {
+			return value;
+		} // 메서드 추가
+```
+예2
+```
+public class EnumAddEx {
+	
+enum Direction {
+	EAST(1,">"), SOUTH(2,"V"), WEST(3,"<"),NORTH(4,"^");
+	
+	private final int value;
+	private final String symbol;
+	private static final Direction[] DIR_ARR = Direction.values(); 
+
+	Direction(int i, String string) {
+		this.value = i;
+		this.symbol = string;
+	}
+	int getValue() {
+		return value;
+	}
+	String getSymbol() {
+		return symbol;
+	}
+	static Direction getDir(int dir) {
+		if(dir < 1 || dir > 4 ) {
+			throw new IllegalArgumentException("Invalid value : " + dir);			
+		} // 적합하지 않거나(illegal) 적절하지 못한(inappropriate) 인자를 메소드에 넘겨주었을 때 발생
+		return DIR_ARR[dir - 1]; // 상수들중 하나를 얻어온다
+	}
+	Direction rotate(int rotateCount) { // 90도씩 회전, 90도= 1
+		rotateCount = rotateCount % 4;
+		if (rotateCount < 0) {
+			rotateCount += 4;
+		}
+		return DIR_ARR[(value - 1 + rotateCount) % 4];
+	} // 회전 메서드
+	public String toString() {
+		return name()+getSymbol();
+	}
+}
+
+	public static void main(String[] args) {
+		
+		for(Direction d: Direction.values()) {
+			System.out.printf("%s = %d%n", d.name(), d.getValue());
+		} // d.ordinal()은 순서대로 나오는것이고
+		  // getValue 메서드로 value값을 불러옴. value는 사용자가 정의
+		
+		Direction dirEast = Direction.EAST;
+		Direction dirEast2 = Direction.getDir(1);
+		
+		System.out.printf("dirEast = %s, %d%n", dirEast.name(),dirEast.getValue());
+		System.out.printf("dirEast2 = %s, %d%n", dirEast2.name(),dirEast2.getValue());
+		System.out.println(Direction.EAST);
+		System.out.println(Direction.EAST.rotate(1));
+		System.out.println(Direction.EAST.rotate(2));
+		System.out.println(Direction.EAST.rotate(3));
+		System.out.println(Direction.EAST.rotate(4));
+		System.out.println(Direction.EAST.rotate(-1));
+		System.out.println(Direction.EAST.rotate(-2));
+		
+	}
+
+}
+```
+

@@ -1,0 +1,93 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]람다식"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":자바.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-29 14:00:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 함수형 인터페이스
+단 하나의 추상메서드만 선언된 인터페이스   
+이걸 가지고 람다식을 구현한다   
+@FunctionalInterface가 붙어있다   
+<br/>
+
+# 사용 예
+```
+@FunctionalInterface
+interface MyFunction2 {
+	void run();
+}
+
+public class FunctionalEx_3 {
+	static void excute(MyFunction2 f) {
+		f.run();
+	}
+
+	static MyFunction2 getMyFunction() {
+		return () -> System.out.println("f3.run()");
+		// f3 구현
+	}
+
+	public static void main(String[] args) {
+
+		// f1 구현
+		MyFunction2 f1 = () -> System.out.println("f1.run()");
+
+		MyFunction2 f2 = new MyFunction2() {
+			@Override
+			public void run() {
+				System.out.println("f2.run()");
+			} // f2 구현
+		};
+		// f1은 f2를 간략하게 람다식으로 만든것
+
+		MyFunction2 f3 = getMyFunction();
+		// f3은 반환값이 람다식인 메서드를 호출해서 가져온것
+
+		f1.run();
+		f2.run();
+		f3.run();
+
+		excute(f1); // 해당 객체의 람다식을 실행
+		excute(() -> System.out.println("run()")); // 람다식은 객체
+	}
+
+}
+```
+

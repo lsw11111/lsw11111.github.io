@@ -1,0 +1,107 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]직렬화"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":자바.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-04-29 10:25:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 직렬화 인터페이스
+객체의 정보가 외부로 유출되는것을 허용   
+네트워크에서 데이터를 주고받을때 쓰인다   
+<br/>
+
+# 사용 예
+```
+class Person implements Serializable {
+
+	private static final long serialVersionUID = -2868143600700271216L;
+	// 버전에 따른 시리얼 번호. 필요에 따라 수정가능	
+	
+	String name;
+	transient String title; // transient키워드를 쓰면 직렬화할때 저장하지 않음
+	
+	public Person() {}
+	public Person(String name, String title){
+		this.name = name;
+		this.title = title;
+	}
+	@Override
+	public String toString() {
+		return name + ", " + title;
+	}
+	/*
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+//		out.write();
+		
+	}
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+//		in.read();
+		
+	}	
+//	Externalizable을 쓴다면 쓰는순서와 읽는순서를 동일하게
+	*/
+}
+```
+만든 객체정보 직렬화 여부 테스트   
+```
+public class SerializationTest {
+
+	public static void main(String[] args) throws ClassNotFoundException {
+		Person pLee = new Person("Lee", "Manager");
+		try(FileOutputStream fos = new FileOutputStream("serial.dat");
+				ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+				oos.writeObject(pLee);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		
+		try (FileInputStream fis = new FileInputStream("serial.dat");
+				ObjectInputStream ois = new ObjectInputStream(fis)){
+				Object obj = ois.readObject();
+				if(obj instanceof Person) {
+					Person person = (Person)obj;
+					System.out.println(person); // Lee만 출력, title필드는 null
+				}
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+```
+
