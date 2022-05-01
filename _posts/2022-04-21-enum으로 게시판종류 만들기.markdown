@@ -11,7 +11,7 @@ category: 스프링
 # multiple tag entries are possible
 tags: [enum]
 # thumbnail image for post
-img: ":post_pic1.jpg"
+img: ":Spring_Framework_logo.png"
 # disable comments on this page
 #comments_disable: true
 
