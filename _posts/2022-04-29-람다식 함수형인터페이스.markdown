@@ -90,4 +90,172 @@ public class FunctionalEx_3 {
 
 }
 ```
+# 기본제공 함수형 인터페이스
+```
+java.util.function패키지 
+자주 사용되는 다양한 함수형 인터페이스 제공
+함수형 인터페이스를 쓸때마다 만드는게 아니라 만들어져있는걸
+가져다가 사용하는게 일반적
+ 
+java.lang.Runnable 매개변수도 반환값도 없음
+Supplier<T> T get() 매개변수없고 반환값만 있음
+Consumer<T> void accept(T t) Supplier와 반대로 매개변수만 있고
+반환값은 없음
+Function<T,R> R apply(T t) 일반적인 함수 매개변수를 하나받고 결과를 반환
+Predicate<T> boolean test(T t) 조건식 표현에 사용
+매개변수는 하나. 반환타입은 boolean
 
+매개변수가 2개인 함수형 인터페이스
+BiConsumer<T,U> void accept(T t, U u)
+BiPredicate<T,U> boolean test(T t, U u)
+BiFunction<T,U,R> R apply(T t, U u)
+
+매개변수 3개인 경우는 인터페이스를 직접 만들면 된다
+interface TriFunction<T,U,R,V> {
+		 V apply(T t, U u, R r)}
+		
+매개변수타입과 반환타입이 일치하는 경우
+UnaryOperator<T> T apply(T t) 단항연산자
+Function의 자손
+BinaryOperator<T,T> T apply(T t,T t) 이항연산자
+```
+간단 테스트
+```
+Predicate<String> isEmptyStr = s -> s.length() == 0;
+		String str = "11";
+		
+		if(isEmptyStr.test(str))
+		System.out.println("빈 문자열입니다");
+		else {
+			System.out.println("빈 문자열이 아닙니다");
+		}
+```
+```
+public class FunctionalEx_2 {
+
+	public static void main(String[] args) {
+		Supplier<Integer> randomInt = () -> (int) (Math.random() * 100) + 1;
+		Consumer<Integer> outputInt = i -> System.out.print(i + ", ");
+		Predicate<Integer> checkEven = i -> i % 2 == 0;
+		Function<Integer, Integer> removeOne = i -> i / 10 * 10;
+		// 1의 자리를 0으로
+
+		List<Integer> intList = new ArrayList<>();
+		makeRandomList(randomInt, intList);
+		System.out.println(intList);
+		printEvenNum(checkEven, outputInt, intList);
+		List<Integer> newList = doSomething(removeOne, intList);
+		System.out.println(newList);
+	}
+
+	static <T> List<T> doSomething(Function<T, T> f, List<T> list) {
+		List<T> newList = new ArrayList<>(list.size());
+
+		for (T i : list) {
+			newList.add(f.apply(i));
+		}
+		return newList;
+	}
+
+	static <T> void makeRandomList(Supplier<T> s, List<T> list) {
+		for (int i = 0; i < 10; i++) {
+			list.add(s.get());
+		}
+	}
+
+	static <T> void printEvenNum(Predicate<T> p, Consumer<T> c, List<T> list) {
+		System.out.print("[");
+		for (T t : list) {
+			if (p.test(t)) {
+				c.accept(t);
+			}
+		}
+		System.out.println("]");
+	}
+}
+```
+
+# 함수형 인터페이스 합치기
+```
+public class PredicateEx_4 {
+
+	public static void main(String[] args) {
+		Function<String, Integer> strToInt = s -> Integer.parseInt(s, 16);
+		Function<Integer, String> intToBinStr = i -> Integer.toBinaryString(i);
+		
+		Function<String, String> strToIntToBinStr = strToInt.andThen(intToBinStr);
+		// andThen()은 앞의 함수와 매개변수로 들어온 함수를 합친것
+		// 실행순서는 앞의 함수 - > 매개변수로 들어온 함수
+		Function<Integer, Integer> intToBinStrToInt = strToInt.compose(intToBinStr);
+		// compose()는 andThen()의 순서만 바꾼것
+		// 매개변수로 들어온 함수를 실행후 앞의 함수를 실행
+		
+		System.out.println(strToIntToBinStr.apply("FF")); // FF - 255 - 11111111
+		System.out.println(intToBinStrToInt.apply(2)); // 2 - "10" - 16
+		
+		Function<String, String> returnSameThing = x -> x;
+		// 항등함수. 매개변수를 그대로 리턴
+		System.out.println(returnSameThing.apply("AAA"));
+		
+		Predicate<Integer> p = i -> i < 100;
+		Predicate<Integer> q = i -> i < 200;
+		Predicate<Integer> r = i -> i % 2 == 0;
+		Predicate<Integer> notP = p.negate(); // !p
+		Predicate<Integer> all = notP.and(q.or(r));
+		
+		System.out.println(all.test(150));
+		
+		String str1 = new String("abc");
+		String str2 = "abc";
+		
+		Predicate<String> checkSameStr1 = Predicate.isEqual(str1);
+		boolean test = checkSameStr1.test(str2);
+		System.out.println(test);
+		
+		System.out.println(str1.equals(str2));
+		// 그냥 equals() 쓰자
+	}
+
+}
+```
+
+# 함수형 인터페이스를 사용하는 컬렉션 프레임워크의 메서드
+```
+removeif(Predicate<E> filer) 조건에 맞는 요소 삭제 List void
+replaceAll(UnaryOperator<E> operator) 모든 요소를 변환하여 대체 Iterable void
+forEach(Consumer<T> action) 모든 요소에 작업 action을 수행 Map ..
+
+public static void main(String[] args) {
+		
+		List<Integer> list = new ArrayList<>();
+		for (int j = 1; j < 11; j++) {
+			list.add(j);			
+		}
+
+		list.forEach(i -> System.out.print(i + ", "));
+		
+		System.out.println();
+		
+		Iterator<Integer> it = list.iterator();
+		while(it.hasNext()) {
+			System.out.print(it.next() + ", ");
+		}
+		
+		System.out.println();
+		
+		list.removeIf(i -> i % 2 == 0 || i % 3 == 0);
+		System.out.println(list);
+		
+		list.replaceAll(i -> i * 10);
+		System.out.println(list);
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("1", "1");
+		map.put("2", "2");
+		map.put("3", "3");
+		map.put("4", "4");
+		
+		map.forEach((k,v)->System.out.print("{" + k + "," + v + "}"));
+		// key, value
+	}
+```

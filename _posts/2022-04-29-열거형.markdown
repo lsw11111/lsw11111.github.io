@@ -42,10 +42,11 @@ date: 2022-04-29 10:35:06 +0900
 <!-- outline-end -->
 
 # 열거형이란
-열거형 관련된 상수들을 묶어놓은것 java는 타입에 안전한 열거형 제공	 
-	 정의하는법 enum 열거형이름 {상수명1,상수명2 ...}	 
-	 열거형 타입의 변수를 선언하고 사용하는법 enum Direction { EAST, SOUTH, WEST, NORTH }
-<br/>
+```
+열거형 관련된 상수들을 묶어놓은것 java는 타입에 안전한 열거형 제공   
+정의하는법 enum 열거형이름 {상수명1,상수명2 ...}   
+열거형 타입의 변수를 선언하고 사용하는법 enum Direction { EAST, SOUTH, WEST, NORTH }   
+
 열거형의 조상 - java.lang.Enum 클래스 Class<E>   
 getDeclaringClass() 열거형 객체 반환, 잘안씀   
 String name() 열거형 상수이름을 문자열로 반환 int ordinal() 열거형 상수가 정의된 순서를 반환(0부터~) T
@@ -53,6 +54,7 @@ valueOf(Class<T> enumType, String name) 지정된 열거형에서 name과 일치
 values(), valueOf()는 컴파일러가 자동으로 추가   
 static E[] values() static E 열거형에 들어있는 모든 상수를 배열로 반환   
 valueOf(String name) name의 값을 불러옴   
+```
 
 # 예시1
 ```

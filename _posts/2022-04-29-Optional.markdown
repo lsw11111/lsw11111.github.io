@@ -1,0 +1,133 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[자바]Optional"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 자바
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":자바.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-05-01 19:00:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# Optional클래스
+쓰는 이유
+1.null을 직접 다루는건 위험 (예외 발생 예방)
+2.null체크 - if문 필수 - 코드가 길어지는걸 방지
+3 null 일수 있는 값은 Optional 객체를 사용
+
+```
+String str = "abc";
+Optional<String> optVal = Optional.of(str);
+Optional<String> optVal2 = Optional.of("abc");
+Optional<String> optVal3 = Optional.ofNullable(null); // OK		
+//	Optional<String> optVal4 = Optional.of(null); // 예외 발생
+Optional<String> optVal5 = Optional.empty(); // OK		
+
+System.out.println(optVal3);
+
+// Optional<T> 객체의 값 가져오기
+Optional<String> optVal6 = Optional.of("abc");
+String str1 = optVal6.get(); // optVal6에 저장된 값 반환
+System.out.println(str1); // null이면 예외발생
+
+String str2 = optVal6.orElse(""); // optVal6의 값이 null이면 "" 반환
+String str3 = optVal6.orElseGet(()->new String()); // null이면 (람다식 -Supplier)로 만들어줌
+// orElse, orElseGet을 많이 씀
+String str4 = optVal6.orElseThrow(NullPointerException::new);
+// null 이면 예외종류 지정해서 발생시킴
+
+// isPresent() - Optional객체의 값이 null이면 false, 아니면 true
+// ifPresent() - null이 아닐때만 ()작업 수행
+
+int[] arr = new int[0];
+System.out.println(arr.length);
+
+Optional<String> strOpt = Optional.empty();
+System.out.println("strOpt = " + strOpt);
+// System.out.println("strOpt = " + strOpt.get());// 아무것도 없어서 예외발생. 그래서 get은 잘 안씀
+
+String str = strOpt.orElse(""); // null이면 "" 반환
+System.out.println("strOpt.orElse = " + str);
+
+String str2 = strOpt.orElseGet(()-> new String());
+System.out.println("strOpt.orElseGet = " + str2);
+```
+# 기본형을 감싸는 OptionalInt, Long, Double
+기본형을 감싸는 래퍼클래스 - 성능을 위해 Optional<T> 대신 사용 
+
+```		
+가져오기
+getAsInt(), getAsLong(), getAsDouble()
+
+빈 객체 Optional객체와의 비교
+OptionalInt optionalInt1 = OptionalInt.of(0); // value = 0
+OptionalInt optionalInt2 = OptionalInt.empty(); // value = 0
+
+값이 저장된 상태인지 empty인지 확인 - isPresent()
+System.out.println("0일때 = " + optionalInt1.isPresent());
+System.out.println("empty() 일때 " + optionalInt2.isPresent());
+System.out.println("2개가 같은 값인가? " + optionalInt1.equals(optionalInt2));
+
+Optional<String> optStr = Optional.of("abcde");
+Optional<Integer> optInt = optStr.map(String::length);
+System.out.println("optStr : " + optStr.orElse(""));
+System.out.println("optInt : " + optInt.orElse(0));
+
+int result1 = Optional.of("123")
+		.filter(s -> s.length() > 0)
+		.map(s -> Integer.parseInt(s)).get();
+System.out.println(result1);
+
+int result2 = Optional.of("")
+		.filter(s -> s.length() > 0) // false - 여기서 제외됨
+		.map(Integer::parseInt).orElse(-1); // map은 의미없음. Optional객체가 null인 상태이므로 orElse로 -1을 넣어줌
+System.out.println(result2);
+
+Optional.of("456").map(Integer::parseInt)
+		.ifPresent(i ->System.out.printf("result3 : %d%n", i));
+// ifPresent() - Optional객체 안에 뭔가 정의되어 있으면 ()를 실행(null이 아닐때)
+
+OptionalInt optInt1 = OptionalInt.of(0);
+OptionalInt optInt2 = OptionalInt.empty();
+System.out.println(optInt1.isPresent()); // null이면 false, 뭔가 있으면 true
+System.out.println(optInt2.isPresent());
+
+System.out.println(optInt1.getAsInt());
+// System.out.println(optInt2.getAsInt()); // empty이므로 예외발생
+
+System.out.println("optInt1 : " + optInt1);
+System.out.println("optInt2 : " + optInt2);
+System.out.println("같은값인가? " + optInt1.equals(optInt2));
+```
