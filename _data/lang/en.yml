@@ -27,7 +27,7 @@ not_found:
 no_translation_tooltip: No Translation
 
 navigation:
-  brand_sub_text: 자바,스프링,MySQL 스터디
+  # brand_sub_text: 자바,스프링,MySQL 스터디
   contact_header: Contact
 
 color_scheme_switch_tooltip: Color scheme
@@ -130,7 +130,7 @@ home:
   new_posts_title: 새 게시물
   new_posts_show_more_button: 더 보기 ...
   # you can use $site_brand in line1 and line2 to convert your site.data.owner.brand text
-  top_header_line1: "이승준의 깃블로그"
+  top_header_line1: ""
   # if commented, top header will be a single line
   # top_header_line2: "$site_brand Theme"
 
@@ -157,7 +157,7 @@ links:
 # for projects layout
 projects:
   title: Projects
-  button_name: Projects
+  button_name: Project
   read_more_text: Read more
   read_less_text: Read less
 
