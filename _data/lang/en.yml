@@ -102,7 +102,7 @@ post:
 # for post-list layout
 post-list:
   title: Blog
-  button_name: Blog
+  button_name: Study
   upside_down_tabs:
     tab:
       all: All
@@ -144,7 +144,7 @@ archives:
 about:
   title: About
   button_name: About
-  sub_title: "Awesome jekyll theme"
+  sub_title: "초보 개발자"
   email_title: email
 
 # for links layout
@@ -168,14 +168,14 @@ privacy-policy:
 # seo meta this is needed for each language
 # If meta_description is not defined in front matter, it's created from (post / page) content,
 # if it has no content, this will be used for page description. It is also used in manifest.json
-meta_common_description: &meta_info $site_brand is a multilingual theme generated with Jekyll and fully compatible with GitHub Pages.
+meta_common_description: 꾸앙
 
 auto_content:
   title: Sample post (auto generated)
-  greeting: Hello!
+  greeting: Hello world!
   text: *meta_info
   more_info: Learn More.
-  auto_generated_text: This is an auto generated sample content for display in the selected language.
+  auto_generated_text: 초보 웹 개발자 이승준입니다. HTML부터 시작해서 CSS, JavaScript, JQuery, Java, SpringBoot, MyBatis, MySQL까지 기본적인 수준의 학습을 했으며 백엔드 개발을 지망하고 있습니다
 
 # cookie_consent:
 #   privacy_policy_link_text: *privacy_policy_title
