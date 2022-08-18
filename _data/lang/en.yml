@@ -168,14 +168,14 @@ privacy-policy:
 # seo meta this is needed for each language
 # If meta_description is not defined in front matter, it's created from (post / page) content,
 # if it has no content, this will be used for page description. It is also used in manifest.json
-meta_common_description: 꾸앙
+meta_common_description: meta_common_description
 
 auto_content:
   title: Sample post (auto generated)
   greeting: Hello world!
   text: *meta_info
-  more_info: Learn More.
-  auto_generated_text: 초보 웹 개발자 이승준입니다. HTML부터 시작해서 CSS, JavaScript, JQuery, Java, SpringBoot, MyBatis, MySQL까지 기본적인 수준의 학습을 했으며 백엔드 개발을 지망하고 있습니다
+  more_info: 
+  auto_generated_text: 신입 백엔드 개발자 이승준입니다. 스터디를 통해 기본적인 수준의 HTML, CSS, JavaScript, JQuery, Java, SpringBoot, MyBatis, MySQL 언어를 공부했으며 협업, 버전관리 및 프로젝트 진행에는 GitHub(SourceTree), IntelliJ를 사용했습니다
 
 # cookie_consent:
 #   privacy_policy_link_text: *privacy_policy_title

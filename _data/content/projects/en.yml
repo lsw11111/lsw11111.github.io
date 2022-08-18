@@ -5,18 +5,18 @@
 page_data:
   main:
     header: "Project"
-    info: "프로젝트를 해보면서 써본 코드"
+    info: "협업을 통한 프로젝트 진행"
     text_color: "white"
     # if you don't want to use background image, comment it. back_color will be activated.
     img: ":projects-heading.jpg"
     back_color: "lightblue"
 
   category:
-    - title: "Example"
-      type: id_example
+    - title: "기획"
+      type: id_기획
       color: "gray"
-    - title: "Picture"
-      type: id_picture
+    - title: "프로젝트 진행"
+      type: id_project
       color: "#62b462"
     - title: "Quote"
       type: id_quote
@@ -25,11 +25,11 @@ page_data:
   list:
     # example
     - type: id_example
-      project_name: "Example Project"
-      project_excerpt: "Examples"
+      project_name: "project1"
+      project_excerpt: "project1"
       img: ":project1_thumb.jpg"
       img_title: "img title1"
-      date: "2021-03-13"
+      date: "2022-7-13"
       post: |
         # Examples
 
@@ -173,16 +173,27 @@ page_data:
 
     # picture
     - type: id_picture
-      project_name: "Example Project"
-      project_excerpt: "Picture"
+      project_name: "기획서 작성"
+      project_excerpt: "사용 프로그램 - PPT"
       img: ":project2_thumb.jpg"
       img_title: "img title2"
-      date: "2021-04-23"
+      date: "2022-07-23"
       post: |
-        # Title
-        This is project content.
+        # 기획서 링크
+        https://docs.google.com/presentation/d/1fBBhT7DFplJPfdi0CSigSXwxNZnbshGl/edit?usp=sharing&ouid=107835762789489710964&rtpof=true&sd=true
+        
 
-        ![Image](:project2_thumb.jpg)
+    - type: id_picture
+      project_name: "ERD 작성"
+      project_excerpt: "사용 IDE - eclipse"
+      img: ":project2_thumb.jpg"
+      img_title: "img title2"
+      date: "2022-07-25"
+      post: |
+        # ERD란
+        시스템의 엔티티들이 무엇이 있는지, 어떤 관계가 있는지를 나타내는 다이어그램
+
+        ![Image](:ERD.jpg)
 
     # quote
     - type: id_quote
