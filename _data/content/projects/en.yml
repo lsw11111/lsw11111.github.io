@@ -215,48 +215,256 @@ page_data:
         ![Image](:리뷰사이트 ia.png)
 
     # quote
-    - type: id_quote
-      project_name: "Example Project"
-      project_excerpt: "William Shakespeare"
+    - type: id_개발
+      project_name: "ERD 구현"
+      project_excerpt: "MySQL 테이블 작성"
       #img: ":project1_thumb.jpg"
       #img_title: "img title3"
       date: "2021-05-27"
       post: |
-        Let me not to the marriage of true minds
-        Admit impediments. Love is not love
-        Which alters when it alteration finds,
-        Or bends with the remover to remove.
-        O no, it is an ever-fixed mark
-        That looks on tempests and is never shaken;
-        It is the star to every wand'ring barque,
-        Whose worth's unknown, although his height be taken.
-        Love's not Time's fool, though rosy lips and cheeks
-        Within his bending sickle's compass come;
-        Love alters not with his brief hours and weeks,
-        But bears it out even to the edge of doom.
-        If this be error and upon me proved,
-        I never writ, nor no man ever loved.
-    - type: id_quote
-      project_name: "Example Project"
-      project_excerpt: "Albert Einstein"
+        ```
+        CREATE TABLE Board
+        (
+          board_no int(20) NOT NULL AUTO_INCREMENT,
+          board_type varchar(100),
+          board_name varchar(100),
+          board_detail varchar(500),
+          board_order int(20),
+          member_no bigint(20) NOT NULL,
+          created_at datetime,
+          updated_at datetime,
+          PRIMARY KEY (board_no)
+        );
+
+        CREATE TABLE Article
+        (
+          contents_no bigint(20) NOT NULL,
+          article_no bigint(20) NOT NULL AUTO_INCREMENT,
+          member_no bigint(20) NOT NULL,
+          title varchar(500),
+          detail text,
+          rating int(20) NOT NULL,
+          image varchar(500),
+          likes int(20) NOT NULL DEFAULT 0,
+          dislikes int(20) NOT NULL DEFAULT 0,
+          created_at datetime NOT NULL,
+          updated_at datetime,
+          PRIMARY KEY (article_no)
+        );
+
+        create table contents 
+        (
+          board_no int(20) Not null comment '게시판 번호',
+          contents_no bigint(20) not null auto_increment comment '작품 번호',
+          member_no bigint(20) not null comment '회원 번호',
+          contents_name varchar(200) not null comment '작품 이름',
+          released_date varchar(20) comment '출시일',
+          info text comment '작품 정보',
+          average_rating double comment '평균 평점',
+          thumbnailURL varchar(500) comment '썸네일 url',
+          created_at datetime comment '작성일',
+          updated_at datetime comment '수정일',
+          primary key(contents_no)
+        );
+
+        CREATE TABLE Member
+        (
+          member_no bigint(20) NOT NULL AUTO_INCREMENT,
+          member_grade varchar(50) NOT NULL,
+          member_id varchar(50) NOT NULL,
+          password varchar(50) NOT NULL,
+          nickname varchar(50),
+          email varchar(30),
+          sign_date datetime NOT NULL,	
+          phone_number varchar(20) COMMENT '하이픈없이',
+          introduce varchar(1000),
+          PRIMARY KEY (member_no)
+        );
+
+        CREATE TABLE Comment
+        (
+          comment_no bigint(20) NOT NULL AUTO_INCREMENT,
+          article_no bigint(20) NOT NULL,
+          member_no bigint(20) NOT NULL,
+          comment_group bigint(20) not null,
+          parent_no bigint(20) not null,
+          nested_comment_order bigint(20) not null,
+          depth bigint(20) not null,
+          detail varchar(500) NOT NULL,
+          created_at datetime NOT NULL,
+          updated_at datetime,
+          PRIMARY KEY (comment_no)
+        );
+        ```
+
+    - type: id_개발
+      project_name: "회원가입"
+      project_excerpt: "유효성 검사"
       img: ":project2_thumb.jpg"
       img_title: "img title4"
       date: "2021-06-08"
       post: |
-        Two things are infinite: the universe and human stupidity; and I'm not sure about the universe.
-    - type: id_quote
-      project_name: "Example Project"
-      project_excerpt: "Mae West"
+        간단한 회원가입 폼입니다   
+        자바스크립트로 유효성 검사를 추가했습니다   
+        ![Image](:회원가입 폼.jpg)
+        ```
+        function idRegexCheck(value) {
+        var regExp = /^[a-z]+[a-z0-9]{6,50}$/g;
+        return regExp.test(value);
+        }
+
+        function pwRegexCheck(value) {
+          var regExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{12,50}$/;
+          return regExp.test(value);
+        }
+        
+        function emailRegexCheck(value) {
+          var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+          return regExp.test(value);
+        }
+        
+        $('#signup-form').submit(function () {
+          
+          var memberId = $('#memberId').val();
+          var email = $('#email').val();
+          var password = $('#password').val();
+          var repeatPassword = $('#repeatPassword').val();
+          var idCheck = $('#idCheck').val();
+          debugger;
+        
+          if (memberId == '') {
+            alert('아이디를 입력해주세요');
+            return false;
+          } else if (!idRegexCheck(memberId)) {
+            alert('아이디는 영문+숫자조합 6자리 이상으로 입력해주세요')
+            return false;
+          } else if (email == '') {
+            alert('이메일을 입력해주세요');
+            return false;
+          } else if (!emailRegexCheck(email)) {
+            alert('이메일 양식에 맞게 입력해주세요');
+            return false;
+          } else if (password == '') {
+            alert('비밀번호를 입력해주세요');
+            return false;
+          } else if(!pwRegexCheck(password)) {
+            alert('비밀번호는 영문, 숫자, 특수문자 조합 12자리 이상으로 입력해주세요')
+            return false;
+          } else if (repeatPassword == '') {
+            alert('비밀번호 확인란을 입력해주세요');
+            return false;
+          } else if (repeatPassword != password) {
+            alert('비밀번호 확인이 틀렸습니다');
+            return false;
+          } else if(idCheck == "N") {
+            alert('아이디 중복체크를 해주세요')
+            return false;
+          }
+          
+        });
+        ```
+    - type: id_개발
+      project_name: "회원가입"
+      project_excerpt: "아이디 중복체크"
       img: ":project1_thumb.jpg"
       img_title: "img title5"
       date: "2021-08-20"
       post: |
-        You only live once, but if you do it right, once is enough.
-    - type: id_quote
-      project_name: "Example Project"
-      project_excerpt: "Mahatma Gandhi "
+        회원가입시 아이디 중복체크를 하도록 합니다   
+        ajax를 이용해 클라이언트-서버 간에 데이터를 주고받는 기능을 이용했습니다   
+        1. 데이터 베이스의 아이디 컬럼 조회(xml파일)   
+        ```
+        <select id="idCheck" parameterType="kr.revieworld.mvc.parameter.MemberParameter" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE MEMBER_ID = #{memberId}
+        </select>
+        ```
+        2. 컨트롤러   
+        이 메서드는 @RestController가 붙은 클래스 안에 있습니다   
+        @Controller가 붙은 클래스에 넣으려면 메서드에 @ResponseBody를 붙이면 됩니다   
+        ```
+        @PostMapping("/idCheck")
+        public int idCheck(String memberId) {
+        if (memberId == "") {
+            log.info("아이디 중복체크 : {}", "아이디가 입력되지 않은 상태에서 submit");
+            return -1;
+        } else {
+            int idCheckResult = memberService.idCheck(memberId);
+            log.info("아이디 중복체크: {}", idCheckResult);
+            return idCheckResult;
+        }
+        }
+        ```
+        3. 자바스크립트
+        컨트롤러로부터 받은 데이터값에 따라   
+        active클래스를 추가/제거해서 드러나는 문구를 추가합니다   
+        ```
+        function fn_idCheck() {
+        $.ajax({
+        url: "/api/idCheck",
+        type: "POST",
+        dataType: "JSON",
+        data: {
+        "memberId": $("#memberId").val()
+        },
+        success: function (data) {
+        if(data == -1) {
+        $('.id-not-input').addClass('active')
+        $('.id-available').removeClass('active')
+        $('.id-error').removeClass('active')
+        } else if (data == 1) {
+        $('.id-error').addClass('active')
+        $('.id-available').removeClass('active')
+        $('.id-not-input').removeClass('active')
+        } else if (data == 0) {
+        $("#idCheck").attr("value", "Y");
+        $('.id-available').addClass('active')
+        $('.id-error').removeClass('active')
+        $('.id-not-input').removeClass('active')
+        }
+        }
+        })
+        }
+        ```
+        결과   
+        ![Image](:아이디 중복체크.jpg)
+
+    - type: id_개발
+      project_name: "계층형 댓글"
+      # project_excerpt: "Mahatma Gandhi "
       img: ":project2_thumb.jpg"
       img_title: "img title6"
-      date: "2021-12-20"
+      date: "2022-6-20"
       post: |
-        Be the change that you wish to see in the world.
+        Comment클래스는 아래와 같은 프로퍼티를 가집니다   
+        parentNo : 부모댓글의 commentNo   
+        depth : 대댓글의 달면 생기는 왼쪽 여백의 크기   
+        commentGroup : 해당 댓글이 속한 그룹 번호   
+        nestedCommentOrder : 그룹내의 정렬순서   
+        <br/>
+        대댓글을 다는 로직은 아래와 같습니다   
+        1. 댓글을 다는 메서드는 2개인데 하나는 새 그룹을 만드는 댓글들 다는것이고   
+        또 하나는 그룹내에서 대댓글을 다는 메서드입니다   
+        2. 그룹을 새로만들시엔 가장 큰 commentGroup 수치를 찾아 +1해서 새 댓글을 만듭니다   
+        3. 대댓글을 달시엔 현재 댓글을 달려고 하는 댓글의 마지막 자손 댓글 찾아 nestedCommentOrder값을 구하고 변수로 선언해둡니다   
+        4. 3번에서 구한 마지막 자손댓글과 그 아래에 오는 모든 그룹내의 댓글의 nestedCommentOrder값을 +1 해줍니다   
+        5. 추가되는 대댓글의 nestedCommentOrder값에 변수로 선언해둔 nestedCommentOrder값을 대입합니다   
+        <br/>
+        결과   
+        ![Image](:대댓글.jpg)
+    - type: id_개발
+      project_name: "추천/비추"
+      # project_excerpt: "Mahatma Gandhi "
+      img: ":project2_thumb.jpg"
+      img_title: "img title6"
+      date: "2022-6-20"
+      post: |
+        Article클래스는 likes, dislikes라는 프로퍼티를 가집니다   
+        클라이언트에서 클릭을 하면 ajax를 통해 데이터베이스의   
+        컬럼값(likes 또는 dislikes)을 +1해주고   
+        자바스크립트로 그 부분만 실시간 새로고침 해줍니다   
+        <br/>
+        <br/>
+        결과   
+        ![Image](:추천.jpg)
