@@ -1,0 +1,205 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[프로젝트]회원가입"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 프로젝트
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":Spring_Framework_logo.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-08-30 15:00:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 회원가입 폼 코드
+컨트롤러
+```
+@PostMapping("/signup")
+    public String signup(MemberParameter memberParameter) {
+        try {
+            if (memberService.get(memberParameter.getMemberId()) == null) { // 입력한 아이디가 DB에 없는 경우 아이디 등록
+                memberParameter.setMemberGrade(MemberGrade.BRONZE);
+                log.info("회원가입 정보: {}", memberParameter);
+                memberService.save(memberParameter);
+                return "forward:/signup-done"; // 회원가입 완료페이지로
+            } else {
+                return "redirect:/signup"; // 이미 가입된경우 xx페이지로
+            }
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            // TODO: 에러가 발생하면 xx페이지로 보낸다
+        }
+        return "forward:/signup-done"; // 회원가입 완료페이지로
+    }
+```
+MyBatis 쿼리
+```
+<insert id="save" parameterType="kr.revieworld.mvc.parameter.MemberParameter" useGeneratedKeys="true" keyProperty="memberNo">
+    INSERT INTO MEMBER
+    (
+    MEMBER_ID,
+    PASSWORD,
+    MEMBER_GRADE,
+    EMAIL,
+    SIGN_DATE
+    )
+    VALUES
+    (
+    #{memberId},
+    #{password},
+    #{memberGrade},
+    #{email},
+    NOW()
+    )
+</insert>
+
+<delete id="delete" parameterType="int">
+    DELETE FROM MEMBER
+    WHERE MEMBER_NO = #{memberNo}
+</delete>
+
+<select id="idCheck" parameterType="kr.revieworld.mvc.parameter.MemberParameter" resultType="int">
+    SELECT COUNT(*)
+    FROM MEMBER
+    WHERE MEMBER_ID = #{memberId}
+</select>
+```
+
+# 자바스크립트를 이용한 유효성 검사
+
+```
+function idRegexCheck(value) {
+  var regExp = /^[a-z]+[a-z0-9]{6,50}$/g;
+	return regExp.test(value);
+}
+
+function pwRegexCheck(value) {
+  var regExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{12,50}$/;
+	return regExp.test(value);
+}
+
+function emailRegexCheck(value) {
+  var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  return regExp.test(value);
+}
+
+$('#signup-form').submit(function () {
+  // form태그 내부 유효성 검사
+
+  var memberId = $('#memberId').val();
+  var email = $('#email').val();
+  var password = $('#password').val();
+  var repeatPassword = $('#repeatPassword').val();
+  var idCheck = $('#idCheck').val();
+  debugger;
+
+  if (memberId == '') {
+    alert('아이디를 입력해주세요');
+    return false;
+  } else if (!idRegexCheck(memberId)) {
+    alert('아이디는 영문+숫자조합 6자리 이상으로 입력해주세요')
+    return false;
+  } else if (email == '') {
+    alert('이메일을 입력해주세요');
+    return false;
+  } else if (!emailRegexCheck(email)) {
+    alert('이메일 양식에 맞게 입력해주세요');
+    return false;
+  } else if (password == '') {
+    alert('비밀번호를 입력해주세요');
+    return false;
+  } else if(!pwRegexCheck(password)) {
+    alert('비밀번호는 영문, 숫자, 특수문자 조합 12자리 이상으로 입력해주세요')
+    return false;
+  } else if (repeatPassword == '') {
+    alert('비밀번호 확인란을 입력해주세요');
+    return false;
+  } else if (repeatPassword != password) {
+    alert('비밀번호 확인이 틀렸습니다');
+    return false;
+  } else if(idCheck == "N") {
+    alert('아이디 중복체크를 해주세요')
+    return false;
+  }
+  
+});
+```
+
+# 아이디 중복체크
+컨트롤러 부분
+```
+@PostMapping("/api/idCheck")
+@ResponseBody
+    public int idCheck(String memberId) {
+        if (memberId == "") {
+            log.info("아이디 중복체크 : {}", "아이디가 입력되지 않은 상태에서 submit");
+            return -1;
+        } else {
+            int idCheckResult = memberService.idCheck(memberId);
+            log.info("아이디 중복체크: {}", idCheckResult);
+            return idCheckResult;
+        }
+    }
+```
+자바스크립트 부분 - ajax를 이용해서 서버와 데이터를 주고 받음
+중복체크가 끝나면 아이디를 입력받는 input태그의 value를 Y로 주고 submit받을수 있도록 하기
+```
+function fn_idCheck() {
+  $.ajax({
+    url: "/api/idCheck",
+    type: "POST",
+    dataType: "JSON",
+    data: {
+      "memberId": $("#memberId").val()
+    },
+    success: function (data) {
+      if(data == -1) {
+        $('.id-not-input').addClass('active')
+        $('.id-available').removeClass('active')
+        $('.id-error').removeClass('active')
+      } else if (data == 1) {
+        $('.id-error').addClass('active')
+        $('.id-available').removeClass('active')
+        $('.id-not-input').removeClass('active')
+      } else if (data == 0) {
+        $("#idCheck").attr("value", "Y");
+        $('.id-available').addClass('active')
+        $('.id-error').removeClass('active')
+        $('.id-not-input').removeClass('active')
+      }
+    }
+  })
+}
+```
+
+

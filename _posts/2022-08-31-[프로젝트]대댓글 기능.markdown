@@ -1,0 +1,112 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "[프로젝트]댓글/대댓글"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 프로젝트
+# multiple tag entries are possible
+tags: []
+# thumbnail image for post
+img: ":Spring_Framework_logo.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-08-30 15:00:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 계층형 댓글 구현
+컨트롤러 부분
+```
+@PostMapping("/{articleNo}/add-comment")
+    public String addComment(@PathVariable int articleNo, @RequestParam String commentDetail) {
+        CommentParameter commentParameter = new CommentParameter();
+        commentParameter.setArticleNo(articleNo);
+        commentParameter.setDetail(commentDetail);
+        commentParameter.setDepth(0);
+        commentParameter.setParentNo(0);
+
+        int commentGroupNum = 0;
+        if (commentService.getLastGroupNum() == null) {
+            commentGroupNum = 1;
+        } else {
+            commentGroupNum = commentService.getLastGroupNum() + 1;
+        }// 마지막으로 입력된 group값 불러와서 +1
+        commentParameter.setCommentGroup(commentGroupNum);
+        log.info("댓글 저장전 정보 : {}", commentParameter);
+        commentService.save(commentParameter);
+        return "redirect:/article/" + articleNo;
+    }
+```
+위 코드는 대댓글이 아닌 원 댓글을 달아 새로운 댓글 그룹을 만듦   
+```
+@PostMapping("/{articleNo}/add-nested-comment")
+    public String addNestedComment(@PathVariable int articleNo,
+                                   @RequestParam int commentGroup, @RequestParam int commentNo, @RequestParam int parentNo,
+                                   @RequestParam int depth, @RequestParam int nestedCommentOrder,
+                                   @RequestParam String nestedCommentDetail
+    ) {
+        CommentParameter inputComment = new CommentParameter();
+        inputComment.setArticleNo(articleNo);
+        inputComment.setDetail(nestedCommentDetail);
+        inputComment.setCommentGroup(commentGroup);
+        inputComment.setParentNo(commentNo);
+        inputComment.setDepth(depth + 1);
+
+        CommentParameter clickedComment = commentService.get(commentNo);
+        int commentOrder = 0;
+        log.info("클릭한 댓글 : {}", clickedComment);
+
+        CommentParameter searchLastCmt = clickedComment;
+        CommentParameter lastChild = searchLastCmt;
+        while (true) {
+            searchLastCmt.setParentNo(searchLastCmt.getCommentNo());
+            lastChild = commentService.getLastNestedComment(searchLastCmt);
+            if (lastChild == null) {
+                break;
+            }
+            searchLastCmt = lastChild;
+            log.info("현재 searchLastParam : {}", searchLastCmt);
+        }
+
+        commentOrder = searchLastCmt.getNestedCommentOrder() + 1;
+        searchLastCmt.setNestedCommentOrder(commentOrder);
+        commentService.updateCommentOrder(searchLastCmt);
+        inputComment.setNestedCommentOrder(commentOrder);
+        log.info("입력댓글의 order : {}", inputComment.getNestedCommentOrder());
+        commentService.save(inputComment);
+        return "redirect:/article/" + articleNo;
+    }
+```
+위 코드는 대댓글을 다는 로직을 구현   
+1.while문을 이용해 현재 댓글을 달려는 부모댓글의 마지막 자손댓글을 찾아 순서값을 구한다   
+2.그 순서값에 +1을 해서 변수로 저장해둔다   
+3.1에서 찾은 마지막 자손댓글 뒤에오는 댓글들의 order값을 전부+1 한다   
+4.2에서 변수로 저장해둔걸 현재 달려는 대댓글의 order값으로 set해서 최종적으로 DB에 저장한다   
+
