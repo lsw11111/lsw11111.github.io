@@ -49,18 +49,21 @@ date: 2022-08-30 15:00:06 +0900
 컨트롤러 부분
 ```
 @PostMapping("/api/click-likes")
-@RequestBody
+@ResponseBody
     public void clickLikes(int articleNo) {
         articleService.clickLikes(articleNo);
     }
 
 @PostMapping("/api/click-dislikes")
-@RequestBody
+@ResponseBody
     public void clickDislikes(int articleNo) {
         articleService.clickDislikes(articleNo);
     }
 ```
-MyBatis 쿼리
+@ResponseBody를 쓸수도 있고 @RestController로 따로 뺄수도 있음   
+<br/>
+
+MyBatis 쿼리   
 ```
 <update id="clickLikes" parameterType="int">
     UPDATE ARTICLE
@@ -74,29 +77,10 @@ MyBatis 쿼리
     WHERE ARTICLE_NO = #{articleNo}
 </update>
 ```
-프로젝트의 방침에 따라 @RequestBody를 쓸수도 있고 @RestController로 따로 뺄수 있음
 
-# 추천/비추천 구현
-추천/비추천 버튼을 누르면 실시간으로 DB가 업데이트됨과 동시에
-웹 브라우저에서도 그 태그부분만 새로고침 되게끔 함   
+<br/>
 
-컨트롤러 부분
-```
-@PostMapping("/click-likes")
-@RequestBody
-    public void clickLikes(int articleNo) {
-        articleService.clickLikes(articleNo);
-    }
-
-@PostMapping("/click-dislikes")
-@RequestBody
-    public void clickDislikes(int articleNo) {
-        articleService.clickDislikes(articleNo);
-    }
-```
-@RequestBody를 썼으나 @RestController로 따로 뺄수 있음   
-
-자바스크립트 부분
+자바스크립트 부분   
 ```
 function click_likes() {
   $.ajax({
