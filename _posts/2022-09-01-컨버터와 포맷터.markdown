@@ -1,7 +1,7 @@
 ---
 # multilingual page pair id, this must pair with translations of this page. (This name must be unique)
 lng_pair: id_Examples
-title: "타입 컨버터 등록"
+title: "addFormatters"
 
 # post specific
 # if not specified, .name will be used from _data/owner.yml
@@ -41,8 +41,8 @@ date: 2022-09-01 15:00:06 +0900
 
 <!-- outline-end -->
 
-# 타입 컨버터 등록법
-WebConfig에 addFormatters를 오버라이드해서 등록
+# 컨버터/포맷터 등록법   
+WebConfig에 addFormatters를 오버라이드해서 등록   
 
 ```
 @Configuration
@@ -54,14 +54,37 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new IntegerToStringConverter());
         registry.addConverter(new StringToIpPortConverter());
         registry.addConverter(new IpPortToStringConverter());
-    } // 스프링은 내부에서 ConversionService 를 제공
-      // addFormatter 에 컨버터를 등록하면 형 변환이 필요할시 자동으로 해준다
+
+        registry.addFormatter(new NumberFormatter());
+    }  // 등록하면 파라미터를 받을때 형 변환/포맷 변경 해준다
 }
 ```
 
+# 뷰에 뿌릴때 어떻게?   
+타임리프 기준
+```
+${ipPort} <- 뷰에 뿌린 데이터의 중괄호 안에 중괄호를 하나 더 겹친다
+하나 더 겹쳤더니 블로그에 안떠서 말로만 설명
+```
+중괄호를 한겹 더 겹치면 컨버터/포맷터가 적용된다   
+또는 th:field를 쓰면 자동으로 적용된다   
+th:field와 th:value가 같이 있으면 th:value는 무시된다   
 
-
-
-
+# 서버내 숫자와 문자간의 형 변환   
+NumberFormat 객체를 이용한다   
+```
+NumberFormat numberFormat = NumberFormat.getInstance(Locale.KOREA);
+Long parsed = numberFormat.parse("숫자로 이루어진 문자열"); // 기본 Long으로 반환됨
+String formatted = numberFormat.format(1000); // 문자열로 바뀌고 3자리마다 쉼표가 들어감
+```
+# 시간, 숫자필드에 포맷 적용   
+```
+@NumberFormat(pattern = "###,###")
+private Integer number;
+@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+private LocaleDateTime dateTime;
+```
+뷰에 데이터를 뿌릴때 중괄호를 한겹 더 겹치거나 th:field로 뿌리면 포맷터가 적용된다   
+PostMapping으로 서버로 가져올땐 원 상태(각각 Integer, LocaleDateTime)로 가져온다   
 
 
