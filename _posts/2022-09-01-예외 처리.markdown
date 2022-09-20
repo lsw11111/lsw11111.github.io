@@ -1,0 +1,84 @@
+---
+# multilingual page pair id, this must pair with translations of this page. (This name must be unique)
+lng_pair: id_Examples
+title: "@ExceptionHandler, @ControllerAdvice"
+
+# post specific
+# if not specified, .name will be used from _data/owner.yml
+author: Mr. Green's Workshop
+# multiple category is not supported
+category: 스프링
+# multiple tag entries are possible
+tags: [annotation]
+# thumbnail image for post
+img: ":Spring_Framework_logo.png"
+# disable comments on this page
+#comments_disable: true
+
+# publish date
+date: 2022-09-01 15:00:06 +0900
+
+# seo
+# if not specified, date will be used.
+#meta_modify_date: 2022-02-10 08:11:06 +0900
+# check the meta_common_description in _data/lang/[language].yml
+#meta_description: ""
+
+# optional
+# if you enabled image_viewer_posts you don't need to enable this. This is only if image_viewer_posts = false
+#image_viewer_on: true
+# if you enabled image_lazy_loader_posts you don't need to enable this. This is only if image_lazy_loader_posts = false
+#image_lazy_loader_on: true
+# exclude from on site search
+#on_site_search_exclude: true
+# exclude from search engines
+#search_engine_exclude: true
+# to disable this page, simply set published: false or delete this file
+#published: false
+---
+
+<!-- outline-start -->
+
+<!-- outline-end -->
+
+# 예외 처리1. 많이 쓰이는 방법
+컨트롤러에 직접 넣거나 @ControllerAdvice로 빼서 넣음
+```
+@ExceptionHandler(IllegalArgumentException.class) // 처리할 예외
+@ResponseStatus(HttpStatus.BAD_REQUEST) // 상태코드
+public ErrorResult illegalArgExceptionHandler(IllegalArgumentException e) {
+  log.error("[exceptionHandler]ex", e);
+  return new ErrorResult("BAD", e.getMessage());
+}
+
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+@ExceptionHandler // 처리할 예외를 적지않고 Exception으로 받으면
+public ErrorResult exHandler(Exception e) {
+  log.error("[exceptionHandler] ex", e);
+  return new ErrorResult("Ex", "내부 오류");
+} // 컨트롤러 내에 구현되어 있지 않은 예외에 대한 ExceptionHandler(공통 처리)
+
+// 예외 처리 메서드들에 조건을 붙여서 선별적으로 예외 처리
+@RestControllerAdvice(annotations = RestController.class,
+        basePackages = "com.example.exception.api",
+        assignableTypes = {ApiExceptionController.class, ApiExceptionV2Controller.class})
+// 괄호 안은 대상 지정 : 특정 애노테이션이 붙은것, 특정 패키지와 하위패키지, 특정 컨트롤러만 적용
+// (대상을 지정하지 않으면) 모든 RestController 에 다 적용되는 예외처리 클래스
+// @ControllerAdvice 는 @ResponseBody 가 빠진것
+```
+
+# 예외 처리2
+```
+예외로 쓸 클래스에
+@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "메시지")
+를 붙이고 extends로 부모클래스로 예외클래스를 지정
+
+컨트롤러에서 리턴값으로
+new ResponseStatusException(HttpStatus.BAD_REQUEST, "에러 메시지", new IllegalArgumentException());
+이런식으로 넣음
+```
+
+
+
+
+
