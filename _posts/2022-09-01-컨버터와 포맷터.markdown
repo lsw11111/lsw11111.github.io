@@ -61,7 +61,7 @@ public class WebConfig implements WebMvcConfigurer {
 ```
 
 # 뷰에 뿌릴때 어떻게?   
-타임리프 기준
+타임리프
 ```
 ${ipPort} <- 뷰에 뿌린 데이터의 중괄호 안에 중괄호를 하나 더 겹친다
 하나 더 겹쳤더니 블로그에 안떠서 말로만 설명
@@ -70,6 +70,15 @@ ${ipPort} <- 뷰에 뿌린 데이터의 중괄호 안에 중괄호를 하나 더
 또는 th:field를 쓰면 자동으로 적용된다   
 th:field와 th:value가 같이 있으면 th:value는 무시된다   
 
+jsp
+```
+DateTime같은 시간객체 포맷 변환해서 뿌리기
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+태그 라이브러리 추가하고
+<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${obj.regDate}"/>
+패턴 설정
+
+```
 # 서버내 숫자와 문자간의 형 변환   
 NumberFormat 객체를 이용한다   
 ```
