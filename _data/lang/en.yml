@@ -172,10 +172,10 @@ meta_common_description: meta_common_description
 
 auto_content:
   title: Sample post (auto generated)
-  greeting: Hello world!
+  greeting: 끄적끄적
   text: *meta_info
   more_info: 
-  auto_generated_text: 신입 백엔드 개발자 이승준입니다. 스터디를 통해 기본적인 수준의 HTML, CSS, JavaScript, JQuery, Java, SpringBoot, MyBatis, MySQL 언어를 공부했으며 협업, 버전관리 및 프로젝트 진행에는 GitHub(SourceTree), VS Code, IntelliJ, MySQL Workbench를 사용했습니다
+  auto_generated_text: 코드 저장소
 
 # cookie_consent:
 #   privacy_policy_link_text: *privacy_policy_title
