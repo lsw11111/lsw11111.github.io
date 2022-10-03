@@ -42,71 +42,38 @@ date: 2022-08-30 15:00:06 +0900
 <!-- outline-end -->
 
 # 계층형 댓글 구현
-컨트롤러 부분
-```
-@PostMapping("/{articleNo}/add-comment")
-    public String addComment(@PathVariable int articleNo, @RequestParam String commentDetail) {
-        CommentParameter commentParameter = new CommentParameter();
-        commentParameter.setArticleNo(articleNo);
-        commentParameter.setDetail(commentDetail);
-        commentParameter.setDepth(0);
-        commentParameter.setParentNo(0);
+대댓글을 달려면 댓글을 달려고 '답글달기'를 클릭한 댓글의 정보가 필요한데   
+이건 GetMapping을 통해 jsp파일에 뿌려져 있습니다   
+이걸 PostMapping으로 가져와서 새 대댓글을 다는데 참조를 하는식입니다   
 
-        int commentGroupNum = 0;
-        if (commentService.getLastGroupNum() == null) {
-            commentGroupNum = 1;
-        } else {
-            commentGroupNum = commentService.getLastGroupNum() + 1;
-        }// 마지막으로 입력된 group값 불러와서 +1
-        commentParameter.setCommentGroup(commentGroupNum);
-        log.info("댓글 저장전 정보 : {}", commentParameter);
-        commentService.save(commentParameter);
-        return "redirect:/article/" + articleNo;
-    }
-```
-위 코드는 대댓글이 아닌 원 댓글을 달아 새로운 댓글 그룹을 만듦   
-```
-@PostMapping("/{articleNo}/add-nested-comment")
-    public String addNestedComment(@PathVariable int articleNo,
-                                   @RequestParam int commentGroup, @RequestParam int commentNo, @RequestParam int parentNo,
-                                   @RequestParam int depth, @RequestParam int nestedCommentOrder,
-                                   @RequestParam String nestedCommentDetail
-    ) {
-        CommentParameter inputComment = new CommentParameter();
-        inputComment.setArticleNo(articleNo);
-        inputComment.setDetail(nestedCommentDetail);
-        inputComment.setCommentGroup(commentGroup);
-        inputComment.setParentNo(commentNo);
-        inputComment.setDepth(depth + 1);
+<br/>
 
-        CommentParameter clickedComment = commentService.get(commentNo);
-        int commentOrder = 0;
-        log.info("클릭한 댓글 : {}", clickedComment);
+컨트롤러 : commentList이라는 이름으로 addAttribute로 추가해줍니다   
+![컨트롤러](:컨트롤러.jpg)   
 
-        CommentParameter searchLastCmt = clickedComment;
-        CommentParameter lastChild = searchLastCmt;
-        while (true) {
-            searchLastCmt.setParentNo(searchLastCmt.getCommentNo());
-            lastChild = commentService.getLastNestedComment(searchLastCmt);
-            if (lastChild == null) {
-                break;
-            }
-            searchLastCmt = lastChild;
-            log.info("현재 searchLastParam : {}", searchLastCmt);
-        }
+<br/>
 
-        commentOrder = searchLastCmt.getNestedCommentOrder() + 1;
-        searchLastCmt.setNestedCommentOrder(commentOrder);
-        commentService.updateCommentOrder(searchLastCmt);
-        inputComment.setNestedCommentOrder(commentOrder);
-        log.info("입력댓글의 order : {}", inputComment.getNestedCommentOrder());
-        commentService.save(inputComment);
-        return "redirect:/article/" + articleNo;
-    }
-```
-위 코드는 대댓글을 다는 로직을 구현   
-1.while문을 이용해 현재 댓글을 달려는 부모댓글의 마지막 자손댓글을 찾아 순서값을 구한다   
-2.그 순서값에 +1을 해서 변수로 저장해둔다   
-3.1에서 찾은 마지막 자손댓글 뒤에오는 댓글들의 order값을 전부+1 한다   
-4.2에서 변수로 저장해둔걸 현재 달려는 대댓글의 order값으로 set해서 최종적으로 DB에 저장한다   
+jsp : 컨트롤러에서 model에 추가한 commentList를   
+c:forEach반복문으로 comment를 하나하나를 뿌립니다   
+위쪽은 해당 comment의 정보가 뿌려져 있고   
+아래쪽은 form태그 안에 input태그 type="hidden"으로 대댓글을 다는데 필요한 정보를   
+PostMapping으로 가져옵니다   
+![뷰](:대댓글 뷰.jpg)   
+<br/>
+
+![뷰](:메서드2.jpg)   
+
+마지막 자식댓글을 찾는 쿼리      
+![뷰](:마지막 자식댓글 찾기 쿼리.jpg)   
+
+마지막 자식댓글 찾기를 while문으로 돌리기   
+![뷰](:마지막 자식댓글 while문 돌리기.jpg)   
+
+이러면 마지막 자손댓글이 searchUpdateDAO에 담겼습니다   
+마지막 자손댓글의 order값+1을 변수에 담아두고   
+뒤에 있는 댓글의 order를 +1씩 해주고(updateCommentOrder)   
+변수에 담아뒀던걸로 inputComment의 order값을 set해준후 최종적으로 저장합니다   
+![뷰](:찾은걸로 뒤에 오는 댓글 밀고 새 댓글 달기.jpg)   
+
+
 
